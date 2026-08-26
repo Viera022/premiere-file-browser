@@ -52,6 +52,7 @@ export const FileCard: React.FC<FileCardProps> = memo(({
   const [scrubPosition, setScrubPosition] = useState<number | null>(null);
   const [scrubTimecode, setScrubTimecode] = useState<string | null>(null);
   const [thumbUrl, setThumbUrl] = useState<string | undefined>(item.thumbnailUrl);
+  const [scrubFrameIndex, setScrubFrameIndex] = useState<number | null>(null);
   const [fontFamilyName, setFontFamilyName] = useState('');
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -59,6 +60,9 @@ export const FileCard: React.FC<FileCardProps> = memo(({
   const rafRef = useRef<number | null>(null);
   const isSeekingRef = useRef<boolean>(false);
   const fileUrl = fileSystemService.getFileUrl(item.path);
+  const getScrubFrameUrl = (baseThumbUrl: string, idx: number) => {
+    return baseThumbUrl.replace(/\.jpg(\?v=\d+)?$/, `_${idx}.jpg$1`);
+  };
 
   const isActive = isHovered || isSelected;
   const thumbHeight = Math.max(68, Math.round(gridSize * 0.72));
@@ -154,6 +158,7 @@ export const FileCard: React.FC<FileCardProps> = memo(({
     setIsHovered(false);
     setScrubPosition(null);
     setScrubTimecode(null);
+    setScrubFrameIndex(null);
 
     if (hoverTimerRef.current) {
       clearTimeout(hoverTimerRef.current);
@@ -171,50 +176,23 @@ export const FileCard: React.FC<FileCardProps> = memo(({
   const handleThumbnailMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!hoverScrubEnabled || item.mediaType !== 'video') return;
 
-    if (!shouldMountVideo) {
-      setShouldMountVideo(true);
-    }
-
     const rect = e.currentTarget.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-
-    rafRef.current = requestAnimationFrame(() => {
-      setScrubPosition(pct * 100);
-
-      if (videoRef.current && videoRef.current.duration && !isSeekingRef.current) {
-        const targetTime = pct * videoRef.current.duration;
-        isSeekingRef.current = true;
-        videoRef.current.currentTime = targetTime;
-        setVideoProgress(pct * 100);
-        setScrubTimecode(formatTime(targetTime));
-        setTimeout(() => { isSeekingRef.current = false; }, 35);
-      }
-    });
-  }, [item.mediaType, shouldMountVideo, hoverScrubEnabled]);
+    
+    // Scale 1 to 5 frames
+    const idx = Math.min(5, Math.max(1, Math.ceil(pct * 5)));
+    setScrubFrameIndex(idx);
+  }, [item.mediaType, hoverScrubEnabled]);
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onSelect(item);
 
-    if (item.mediaType === 'video') {
-      const nextAudible = !isPlayingAudible;
-      setIsPlayingAudible(nextAudible);
-      if (nextAudible) {
-        setShouldMountVideo(true);
-        if (videoRef.current) {
-          videoRef.current.volume = Math.max(0, Math.min(1, volume));
-          videoRef.current.muted = false;
-          videoRef.current.play().catch(() => {});
-        }
-      } else {
-        if (videoRef.current) {
-          videoRef.current.pause();
-        }
-      }
-    } else if (item.mediaType === 'audio') {
-      setIsPlayingAudible(!isPlayingAudible);
+    if (item.isDirectory) {
+      // Direct select for directories (double-click opens them)
+    } else {
+      // Single click on file opens the preview modal directly!
+      onQuickLook(item);
     }
   };
 
@@ -257,6 +235,10 @@ export const FileCard: React.FC<FileCardProps> = memo(({
     }
 
     if (item.mediaType === 'video') {
+      const displaySrc = isHovered && hoverScrubEnabled && scrubFrameIndex !== null && thumbUrl
+        ? getScrubFrameUrl(thumbUrl, scrubFrameIndex)
+        : thumbUrl;
+
       return (
         <div 
           onMouseMove={handleThumbnailMouseMove}
@@ -264,73 +246,19 @@ export const FileCard: React.FC<FileCardProps> = memo(({
             hoverScrubEnabled ? 'cursor-ew-resize' : ''
           }`}
         >
-          {(!shouldMountVideo || videoError) && (
-            thumbUrl ? (
-              <img
-                src={thumbUrl}
-                alt={item.name}
-                className="w-full h-full object-cover pointer-events-none"
-                loading="lazy"
-              />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-900/80 text-sky-400">
-                <Film className="w-6 h-6 mb-1 opacity-70" />
-                <span className="text-[8px] uppercase font-bold text-zinc-400 tracking-wider">
-                  {item.extension.replace('.', '') || 'VIDEO'}
-                </span>
-              </div>
-            )
-          )}
-
-          {shouldMountVideo && !videoError && (
-            <video
-              ref={videoRef}
-              src={fileUrl}
-              autoPlay={!scrubPosition}
-              playsInline
-              loop
-              muted={!isPlayingAudible}
-              onError={() => setVideoError(true)}
-              onTimeUpdate={handleTimeUpdate}
-              className="w-full h-full object-cover animate-fade-in pointer-events-none"
+          {thumbUrl ? (
+            <img
+              src={displaySrc}
+              alt={item.name}
+              className="w-full h-full object-cover pointer-events-none"
+              loading="lazy"
             />
-          )}
-
-          {/* Scrub Floating Timecode Badge */}
-          {hoverScrubEnabled && scrubTimecode && isHovered && (
-            <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-black/85 border border-white/20 text-[8px] font-mono font-bold text-white flex items-center gap-1 shadow-2xl z-20 animate-fade-in">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
-              <span>{scrubTimecode}</span>
-            </div>
-          )}
-
-          {isPlayingAudible && !scrubTimecode && (
-            <div className="absolute top-1 left-1 px-1 py-0.2 rounded bg-emerald-500/80 text-[8px] font-bold text-white flex items-center gap-0.5 shadow-lg z-20 animate-pulse">
-              <Volume2 className="w-2.5 h-2.5" />
-              <span>{Math.round(volume * 100)}%</span>
-            </div>
-          )}
-
-          {videoError && (
-            <div className="absolute bottom-1 left-1 px-1 py-0.2 rounded bg-rose-500/80 text-white text-[7px] flex items-center gap-0.5">
-              <AlertCircle className="w-2 h-2" />
-              <span>Codec 8K</span>
-            </div>
-          )}
-
-          {/* Progress / Scrubbing Bar */}
-          {isActive && shouldMountVideo && (
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/60 z-20">
-              <div 
-                className="h-full bg-accent shadow-md shadow-accent/50 transition-all duration-75"
-                style={{ width: `${videoProgress}%` }}
-              />
-              {hoverScrubEnabled && scrubPosition !== null && (
-                <div 
-                  className="absolute top-[-2px] w-1 h-2 bg-white rounded-full shadow-lg pointer-events-none"
-                  style={{ left: `${scrubPosition}%` }}
-                />
-              )}
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-900/80 text-sky-400">
+              <Film className="w-6 h-6 mb-1 opacity-70" />
+              <span className="text-[8px] uppercase font-bold text-zinc-400 tracking-wider">
+                {item.extension.replace('.', '') || 'VIDEO'}
+              </span>
             </div>
           )}
         </div>
@@ -478,16 +406,6 @@ export const FileCard: React.FC<FileCardProps> = memo(({
         {/* Bottom-Right Action Buttons */}
         {!item.isDirectory && isActive && (
           <div className="absolute bottom-1.5 right-1.5 flex items-center gap-1 z-20 animate-fade-in bg-black/90 p-0.5 rounded-lg border border-white/10 shadow-lg">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onQuickLook(item);
-              }}
-              className="p-1 rounded-md bg-white/10 hover:bg-white/30 text-zinc-200 hover:text-white transition-colors"
-              title="QuickLook (Espaço)"
-            >
-              <Eye className="w-3 h-3" />
-            </button>
             <button
               onClick={handleInsertTimeline}
               className="p-1 rounded-md bg-accent hover:bg-accent-hover text-white shadow-sm transition-colors"

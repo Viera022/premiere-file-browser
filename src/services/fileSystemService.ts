@@ -778,15 +778,39 @@ class FileSystemService {
 
       const ffmpeg = this.getFfmpegPath();
       const cleanVideo = this.normalizePath(videoPath);
-      const cmd = `"${ffmpeg}" -y -ss 00:00:01 -i "${cleanVideo}" -vframes 1 -vf "scale=240:-1:flags=fast_bilinear" -q:v 5 "${outPath}"`;
+      const outPattern = outPath.replace(/\.jpg$/, '_%d.jpg');
+      const cmd = `"${ffmpeg}" -y -i "${cleanVideo}" -vf "fps=2,scale=240:-1:flags=fast_bilinear" -vframes 5 "${outPattern}"`;
 
-      nodeMods.child_process.exec(cmd, { timeout: 2500 }, (err: any) => {
-        if (!err && nodeMods.fs.existsSync(outPath)) {
+      nodeMods.child_process.exec(cmd, { timeout: 4000 }, (err: any) => {
+        const firstFrame = outPath.replace(/\.jpg$/, '_1.jpg');
+        if (!err && nodeMods.fs.existsSync(firstFrame)) {
+          try {
+            nodeMods.fs.copyFileSync(firstFrame, outPath);
+          } catch (e) {
+            console.error('Failed to copy first frame:', e);
+          }
+        }
+
+        if (nodeMods.fs.existsSync(outPath)) {
           const url = this.getFileUrl(outPath);
           this.thumbCache.set(videoPath, url);
           resolve(url);
         } else {
-          resolve(null);
+          // Fallback to extract at least one frame if fps=2 failed (for ultra-short videos)
+          const fallbackCmd = `"${ffmpeg}" -y -ss 00:00:00 -i "${cleanVideo}" -vframes 1 -vf "scale=240:-1:flags=fast_bilinear" -q:v 5 "${outPath}"`;
+          nodeMods.child_process.exec(fallbackCmd, { timeout: 2000 }, (fallbackErr: any) => {
+            if (!fallbackErr && nodeMods.fs.existsSync(outPath)) {
+              // Copy to _1.jpg as well for consistency
+              try {
+                nodeMods.fs.copyFileSync(outPath, firstFrame);
+              } catch {}
+              const url = this.getFileUrl(outPath);
+              this.thumbCache.set(videoPath, url);
+              resolve(url);
+            } else {
+              resolve(null);
+            }
+          });
         }
         this.isProcessingQueue = false;
         setTimeout(() => this.processFfmpegQueue(), 20);
