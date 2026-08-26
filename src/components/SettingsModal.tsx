@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Moon, Sun, Volume2, Globe, GraduationCap, User, Film, Cpu } from 'lucide-react';
+import { X, Moon, Sun, Volume2, Globe, GraduationCap, User, Film, Cpu, AlertTriangle } from 'lucide-react';
 import { ThemeMode } from '../types';
 import { Language, SUPPORTED_LANGUAGES, getTranslation } from '../i18n/translations';
 import { FlagIcon } from './FlagIcon';
@@ -37,6 +37,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [userName, setUserName] = useState(() => {
     return localStorage.getItem('filebrowser_user_name') || '';
   });
+  const [shouldSimulateCrash, setShouldSimulateCrash] = useState(false);
+
+  if (shouldSimulateCrash) {
+    throw new Error('Simulação de Erro de Teste: O mecanismo de proteção e ErrorBoundary capturou a falha com sucesso!');
+  }
 
   const handleSaveName = (val: string) => {
     setUserName(val);
@@ -45,7 +50,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in select-none"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-fade-in select-none"
       onClick={onClose}
     >
       <div 
@@ -65,7 +70,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         {/* User Name Setting */}
         <div className="space-y-1">
           <label className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5">
-            <User className="w-3.5 h-3.5 text-apple-accent" />
+            <User className="w-3.5 h-3.5 text-accent" />
             <span>{t.userNameLabel}</span>
           </label>
           <input
@@ -73,7 +78,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             value={userName}
             onChange={(e) => handleSaveName(e.target.value)}
             placeholder={t.userNamePlaceholder}
-            className="w-full px-3 py-1.5 text-xs rounded-xl bg-white/5 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-apple-accent transition-colors"
+            className="w-full px-3 py-1.5 text-xs rounded-xl bg-white/5 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-accent transition-colors"
           />
         </div>
 
@@ -92,7 +97,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   onClick={() => onLanguageChange(l.code)}
                   className={`py-1.5 px-1 rounded-xl text-[10px] font-semibold border transition-all flex flex-col items-center gap-1 ${
                     isSelected 
-                      ? 'bg-apple-accent text-white border-apple-accent shadow-md scale-105' 
+                      ? 'bg-accent text-white border-accent shadow-md scale-105' 
                       : 'bg-white/5 text-zinc-400 border-white/10 hover:text-white hover:bg-white/10'
                   }`}
                   title={l.nativeName}
@@ -144,7 +149,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <button
             onClick={onToggleHoverScrub}
             className={`w-10 h-5 rounded-full transition-colors relative flex items-center px-0.5 shrink-0 ${
-              hoverScrubEnabled ? 'bg-apple-accent' : 'bg-white/15'
+              hoverScrubEnabled ? 'bg-accent' : 'bg-white/15'
             }`}
           >
             <div
@@ -163,7 +168,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
           <button
             onClick={onToggleTheme}
-            className="px-3 py-1.5 rounded-xl apple-button text-xs font-medium text-zinc-300 hover:text-white flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-xl btn-glass text-xs font-medium text-zinc-300 hover:text-white flex items-center gap-1.5"
           >
             {themeMode === 'dark' ? (
               <>
@@ -195,7 +200,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             step="0.01"
             value={volume}
             onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-white/20 rounded-lg cursor-pointer accent-apple-accent"
+            className="w-full h-1.5 bg-white/20 rounded-lg cursor-pointer accent-accent"
           />
         </div>
 
@@ -209,13 +214,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               }}
               className="w-full py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-zinc-300 hover:text-white flex items-center justify-center gap-2 transition-colors"
             >
-              <GraduationCap className="w-4 h-4 text-apple-accent" />
+              <GraduationCap className="w-4 h-4 text-accent" />
               <span>{t.replayTour}</span>
             </button>
           </div>
         )}
 
-        <div className="pt-1.5 border-t border-white/10 text-center">
+        {/* 🚨 Test Crash Simulation Button */}
+        <div className="pt-1.5 border-t border-white/10">
+          <button
+            onClick={() => setShouldSimulateCrash(true)}
+            className="w-full py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-[11px] font-semibold text-rose-300 hover:text-rose-200 flex items-center justify-center gap-1.5 transition-colors"
+            title="Simular um erro visual para ver a tela de proteção e recuperação"
+          >
+            <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
+            <span>🚨 Simular Crash de Teste</span>
+          </button>
+        </div>
+
+        <div className="pt-1 border-t border-white/10 text-center">
           <span className="text-[10px] text-zinc-500 font-mono">Premiere File Browser v1.0.0</span>
         </div>
       </div>

@@ -4,9 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Premiere File Browser</title>
+    <script>
+      // CEP Mixed-Context fix: prevent bundled libraries from detecting Node environment
+      if (typeof window.module === 'object') {
+        window.__node_module = window.module;
+        window.module = undefined;
+      }
+      if (typeof window.exports === 'object') {
+        window.__node_exports = window.exports;
+        window.exports = undefined;
+      }
+    </script>
     <script src="/CSInterface.js"></script>
   </head>
-  <body class="bg-apple-bg text-apple-textPrimary select-none overflow-hidden antialiased">
+  <body class="bg-panel-bg text-text-main select-none overflow-hidden antialiased">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

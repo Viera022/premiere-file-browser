@@ -118,7 +118,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
       return (
         <div className="flex h-full w-full items-center justify-center p-6 bg-zinc-950 text-white select-none overflow-y-auto font-sans">
-          <div className="max-w-md w-full bg-zinc-900/90 border border-rose-500/30 rounded-2xl p-6 shadow-2xl backdrop-blur-xl flex flex-col gap-4 animate-scale-in">
+          <div className="max-w-md w-full bg-zinc-900 border border-rose-500/30 rounded-2xl p-6 shadow-2xl flex flex-col gap-4 animate-scale-in">
             {/* Header */}
             <div className="flex items-center gap-3 border-b border-white/10 pb-3">
               <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/30 flex items-center justify-center shrink-0">
@@ -151,7 +151,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
               <button
                 onClick={this.handleOpenGitHubIssue}
-                className="py-2 px-3 rounded-xl text-xs font-semibold bg-apple-accent hover:bg-apple-accentHover text-white flex items-center justify-center gap-1.5 transition-colors shadow"
+                className="py-2 px-3 rounded-xl text-xs font-semibold bg-accent hover:bg-accent-hover text-white flex items-center justify-center gap-1.5 transition-colors shadow"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
                 <span>{t.crashGitHubBtn}</span>

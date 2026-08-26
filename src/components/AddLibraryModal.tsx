@@ -137,7 +137,7 @@ export const AddLibraryModal: React.FC<AddLibraryModalProps> = ({ onClose, onAdd
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/75 backdrop-blur-md animate-fade-in select-none"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/90 animate-fade-in select-none"
       onClick={onClose}
     >
       <div 
@@ -147,7 +147,7 @@ export const AddLibraryModal: React.FC<AddLibraryModalProps> = ({ onClose, onAdd
         {/* Header */}
         <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between bg-white/[0.04] shrink-0">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-apple-accent flex items-center justify-center text-white shadow-sm">
+            <div className="w-6 h-6 rounded-lg bg-accent flex items-center justify-center text-white shadow-sm">
               <FolderPlus className="w-3.5 h-3.5" />
             </div>
             <h2 className="text-sm font-bold text-white">Adicionar Biblioteca</h2>
@@ -167,7 +167,7 @@ export const AddLibraryModal: React.FC<AddLibraryModalProps> = ({ onClose, onAdd
             onClick={() => setActiveTab('suggestions')}
             className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
               activeTab === 'suggestions'
-                ? 'bg-apple-accent text-white shadow-md'
+                ? 'bg-accent text-white shadow-md'
                 : 'text-zinc-400 hover:text-white hover:bg-white/5'
             }`}
           >
@@ -179,7 +179,7 @@ export const AddLibraryModal: React.FC<AddLibraryModalProps> = ({ onClose, onAdd
             onClick={() => setActiveTab('custom')}
             className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
               activeTab === 'custom'
-                ? 'bg-apple-accent text-white shadow-md'
+                ? 'bg-accent text-white shadow-md'
                 : 'text-zinc-400 hover:text-white hover:bg-white/5'
             }`}
           >
@@ -193,7 +193,7 @@ export const AddLibraryModal: React.FC<AddLibraryModalProps> = ({ onClose, onAdd
           {activeTab === 'suggestions' ? (
             <div className="space-y-4">
               <div>
-                <h3 className="text-xs font-bold text-apple-accent uppercase tracking-wider mb-2">
+                <h3 className="text-xs font-bold text-accent uppercase tracking-wider mb-2">
                   Pastas de Assets & Edição
                 </h3>
                 <div className="grid grid-cols-2 gap-2">
@@ -203,9 +203,9 @@ export const AddLibraryModal: React.FC<AddLibraryModalProps> = ({ onClose, onAdd
                       <button
                         key={sug.path}
                         onClick={() => handleAddSuggestion(sug)}
-                        className="flex items-center gap-2.5 p-2.5 rounded-xl glass-card hover:border-apple-accent text-left group"
+                        className="flex items-center gap-2.5 p-2.5 rounded-xl glass-card hover:border-accent text-left group"
                       >
-                        <div className="w-8 h-8 rounded-lg bg-white/10 group-hover:bg-apple-accent/20 flex items-center justify-center text-apple-accent shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-white/10 group-hover:bg-accent/20 flex items-center justify-center text-accent shrink-0">
                           <IconComp className="w-4 h-4" />
                         </div>
                         <div className="min-w-0">
@@ -257,13 +257,13 @@ export const AddLibraryModal: React.FC<AddLibraryModalProps> = ({ onClose, onAdd
                     value={path}
                     onChange={(e) => setPath(e.target.value)}
                     placeholder="Ex: E:\\Meus Assets\\Sons"
-                    className="flex-1 px-3 py-1.5 rounded-lg bg-black/40 border border-white/15 text-xs text-white placeholder-zinc-500 outline-none focus:border-apple-accent"
+                    className="flex-1 px-3 py-1.5 rounded-lg bg-black/40 border border-white/15 text-xs text-white placeholder-zinc-500 outline-none focus:border-accent"
                     required
                   />
                   <button
                     type="button"
                     onClick={handlePickFolder}
-                    className="px-3 py-1.5 rounded-lg text-xs apple-button font-medium shrink-0"
+                    className="px-3 py-1.5 rounded-lg text-xs btn-glass font-medium shrink-0"
                   >
                     Procurar...
                   </button>
@@ -280,7 +280,7 @@ export const AddLibraryModal: React.FC<AddLibraryModalProps> = ({ onClose, onAdd
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Ex: Minha Coleção de SFX"
-                  className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/15 text-xs text-white placeholder-zinc-500 outline-none focus:border-apple-accent"
+                  className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/15 text-xs text-white placeholder-zinc-500 outline-none focus:border-accent"
                   required
                 />
               </div>
@@ -301,7 +301,7 @@ export const AddLibraryModal: React.FC<AddLibraryModalProps> = ({ onClose, onAdd
                         onClick={() => setSelectedIcon(opt.id)}
                         className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${
                           isSelected
-                            ? 'bg-apple-accent/30 border-apple-accent text-white shadow-md scale-105'
+                            ? 'bg-accent/30 border-accent text-white shadow-md scale-105'
                             : 'bg-white/[0.02] border-transparent text-zinc-400 hover:text-white hover:bg-white/10'
                         }`}
                         title={opt.label}
@@ -318,7 +318,7 @@ export const AddLibraryModal: React.FC<AddLibraryModalProps> = ({ onClose, onAdd
                 <button
                   type="submit"
                   disabled={!name.trim() || !path.trim()}
-                  className="w-full py-2 rounded-xl text-xs font-bold apple-button-accent flex items-center justify-center gap-1.5 shadow-lg disabled:opacity-50"
+                  className="w-full py-2 rounded-xl text-xs font-bold btn-glass-accent flex items-center justify-center gap-1.5 shadow-lg disabled:opacity-50"
                 >
                   <Check className="w-4 h-4" />
                   <span>Salvar Biblioteca</span>

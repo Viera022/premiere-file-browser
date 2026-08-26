@@ -4,6 +4,7 @@ import {
   Eye, 
   PlusCircle, 
   FolderOpen, 
+  FolderTree,
   Copy, 
   Tag, 
   Check, 
@@ -22,6 +23,7 @@ interface ContextMenuProps {
   onToggleStar: (item: FileItem) => void;
   onQuickLook: (item: FileItem) => void;
   onSetLabelColor: (item: FileItem, colorId: string | null) => void;
+  onNavigateToParentFolder?: (path: string) => void;
 }
 
 export const ContextMenu: React.FC<ContextMenuProps> = ({
@@ -31,7 +33,8 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   onClose,
   onToggleStar,
   onQuickLook,
-  onSetLabelColor
+  onSetLabelColor,
+  onNavigateToParentFolder
 }) => {
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -85,7 +88,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
 
       {/* Label Colors Bar */}
       <div className="px-2 py-1.5">
-        <div className="text-[9px] font-bold uppercase tracking-wider text-apple-textMuted mb-1.5 flex items-center justify-between">
+        <div className="text-[9px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5 flex items-center justify-between">
           <span>Cor / Label</span>
           {item.labelColor && (
             <button
@@ -132,7 +135,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
         <>
           <button
             onClick={handleInsertTimeline}
-            className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-zinc-200 hover:text-white hover:bg-apple-accent transition-colors text-left"
+            className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-zinc-200 hover:text-white hover:bg-accent transition-colors text-left"
           >
             <PlusCircle className="w-3.5 h-3.5" />
             <span>Inserir na Timeline</span>
@@ -164,6 +167,23 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
       </button>
 
       {/* System Actions */}
+      {onNavigateToParentFolder && (
+        <button
+          onClick={() => {
+            const sepIdx = Math.max(item.path.lastIndexOf('\\'), item.path.lastIndexOf('/'));
+            if (sepIdx > 0) {
+              const parentPath = item.path.slice(0, sepIdx);
+              onNavigateToParentFolder(parentPath);
+            }
+            onClose();
+          }}
+          className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-zinc-200 hover:text-white hover:bg-white/10 transition-colors text-left"
+        >
+          <FolderTree className="w-3.5 h-3.5 text-sky-400" />
+          <span>Ir para a Pasta</span>
+        </button>
+      )}
+
       <button
         onClick={handleReveal}
         className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-zinc-200 hover:text-white hover:bg-white/10 transition-colors text-left"

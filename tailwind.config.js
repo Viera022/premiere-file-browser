@@ -7,19 +7,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        apple: {
+        accent: {
+          DEFAULT: '#0A84FF',
+          hover: '#0071E3',
+        },
+        panel: {
           bg: '#141416',
-          panel: 'rgba(28, 28, 30, 0.85)',
-          sidebar: 'rgba(20, 20, 22, 0.92)',
-          card: 'rgba(38, 38, 42, 0.65)',
-          cardHover: 'rgba(52, 52, 58, 0.85)',
-          border: 'rgba(255, 255, 255, 0.08)',
-          borderHover: 'rgba(255, 255, 255, 0.18)',
-          accent: '#0A84FF',
-          accentHover: '#0071E3',
-          textMuted: '#86868B',
-          textPrimary: '#F5F5F7',
-          quicklook: 'rgba(15, 15, 18, 0.92)'
+          sidebar: '#121214',
+          card: '#1c1c1f',
+        },
+        text: {
+          main: '#F5F5F7',
+          muted: '#86868B',
+        },
+        border: {
+          subtle: 'rgba(255, 255, 255, 0.08)',
+          hover: 'rgba(255, 255, 255, 0.18)',
         }
       },
       backdropBlur: {

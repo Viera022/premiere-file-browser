@@ -157,7 +157,7 @@ export const QuickLookModal: React.FC<QuickLookModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-1 sm:p-3 bg-black/75 backdrop-blur-md animate-fade-in select-none overflow-hidden"
+      className="fixed inset-0 z-50 flex items-center justify-center p-1 sm:p-3 bg-black/90 animate-fade-in select-none overflow-hidden"
       onClick={onClose}
     >
       <div 
@@ -339,7 +339,7 @@ export const QuickLookModal: React.FC<QuickLookModalProps> = ({
           <div className="p-2.5 border-t border-white/10 bg-black/60 flex flex-col gap-1.5 shrink-0">
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between text-[9px] font-mono text-zinc-400">
-                <span className="text-apple-accent font-semibold">{formatTime(currentTime)}</span>
+                <span className="text-accent font-semibold">{formatTime(currentTime)}</span>
                 <div className="flex gap-2">
                   <span>IN: <strong className="text-white">{formatTime(inPoint)}</strong></span>
                   <span>OUT: <strong className="text-white">{formatTime(outPoint)}</strong></span>
@@ -350,7 +350,7 @@ export const QuickLookModal: React.FC<QuickLookModalProps> = ({
               <div className="relative h-2 bg-white/15 rounded-full cursor-pointer flex items-center">
                 {duration > 0 && (
                   <div
-                    className="absolute h-full bg-apple-accent/40 rounded-full"
+                    className="absolute h-full bg-accent/40 rounded-full"
                     style={{
                       left: `${(inPoint / duration) * 100}%`,
                       width: `${((outPoint - inPoint) / duration) * 100}%`
@@ -415,7 +415,7 @@ export const QuickLookModal: React.FC<QuickLookModalProps> = ({
                       setIsMuted(false);
                       onVolumeChange(parseFloat(e.target.value));
                     }}
-                    className="w-14 h-1 bg-white/20 rounded cursor-pointer accent-apple-accent"
+                    className="w-14 h-1 bg-white/20 rounded cursor-pointer accent-accent"
                     title={`Volume: ${Math.round((isMuted ? 0 : volume) * 100)}%`}
                   />
                 </div>
@@ -439,7 +439,7 @@ export const QuickLookModal: React.FC<QuickLookModalProps> = ({
               <div className="flex items-center gap-1">
                 <button
                   onClick={handleImportBin}
-                  className="flex items-center gap-1 px-2 py-1 rounded text-[10px] apple-button"
+                  className="flex items-center gap-1 px-2 py-1 rounded text-[10px] btn-glass"
                 >
                   <FolderPlus className="w-3 h-3 text-zinc-400" />
                   <span className="hidden xs:inline">Bin</span>
@@ -447,7 +447,7 @@ export const QuickLookModal: React.FC<QuickLookModalProps> = ({
                 <button
                   onClick={handleInsertPlayhead}
                   disabled={isInserting}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-medium apple-button-accent"
+                  className="flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-medium btn-glass-accent"
                 >
                   {insertSuccess ? <CheckCircle2 className="w-3 h-3 text-emerald-300" /> : <PlusCircle className="w-3 h-3" />}
                   <span>{insertSuccess ? 'Inserido!' : isInserting ? '...' : 'Inserir'}</span>
@@ -462,14 +462,14 @@ export const QuickLookModal: React.FC<QuickLookModalProps> = ({
           <div className="p-2 border-t border-white/10 bg-black/60 flex items-center justify-end gap-1.5 shrink-0">
             <button
               onClick={handleImportBin}
-              className="flex items-center gap-1 px-2.5 py-1 rounded text-xs apple-button"
+              className="flex items-center gap-1 px-2.5 py-1 rounded text-xs btn-glass"
             >
               <FolderPlus className="w-3 h-3 text-zinc-400" />
               <span>Importar ao Bin</span>
             </button>
             <button
               onClick={handleInsertPlayhead}
-              className="flex items-center gap-1 px-3 py-1 rounded text-xs font-medium apple-button-accent"
+              className="flex items-center gap-1 px-3 py-1 rounded text-xs font-medium btn-glass-accent"
             >
               <PlusCircle className="w-3 h-3" />
               <span>Inserir na Timeline</span>

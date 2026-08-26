@@ -1,4 +1,4 @@
-import { FileItem, MediaType, DriveItem, CustomLibrary } from '../types';
+import { FileItem, MediaType, DriveItem, CustomLibrary, MediaFilter } from '../types';
 import { premiereService } from './premiereService';
 import JSZip from 'jszip';
 
@@ -516,6 +516,141 @@ class FileSystemService {
     }
 
     return this.getMockFiles(dirPath, starredSet, labelsMap);
+  }
+
+  public async searchRecursive(
+    rootPath: string,
+    query: string,
+    mediaFilter: MediaFilter = 'all',
+    options: { maxDepth?: number; maxResults?: number } = {},
+    onProgress?: (batch: FileItem[]) => void,
+    signal?: AbortSignal
+  ): Promise<FileItem[]> {
+    const cleanRoot = this.normalizePath(rootPath);
+    const maxDepth = options.maxDepth ?? 6;
+    const maxResults = options.maxResults ?? 600;
+    const cleanQuery = query.trim().toLowerCase();
+    const queryTokens = cleanQuery.split(/\s+/).filter(Boolean);
+
+    const starredSet = this.getStarredPaths();
+    const labelsMap = this.getLabelsMap();
+
+    const nodeMods = this.getNodeModules();
+    if (!nodeMods || !nodeMods.fs || !nodeMods.path) {
+      return [];
+    }
+
+    const { fs, path } = nodeMods;
+    const results: FileItem[] = [];
+    const queue: { dir: string; depth: number }[] = [{ dir: cleanRoot, depth: 0 }];
+
+    const BATCH_SIZE = 15;
+    let pendingBatch: FileItem[] = [];
+
+    const flushBatch = () => {
+      if (pendingBatch.length > 0 && onProgress) {
+        onProgress([...pendingBatch]);
+        pendingBatch = [];
+      }
+    };
+
+    while (queue.length > 0 && results.length < maxResults) {
+      if (signal?.aborted) break;
+
+      const current = queue.shift()!;
+      if (current.depth > maxDepth) continue;
+
+      let entries: any[] = [];
+      try {
+        entries = await new Promise<any[]>((resolve) => {
+          fs.readdir(current.dir, { withFileTypes: true }, (err: any, files: any[]) => {
+            if (err || !files) resolve([]);
+            else resolve(files);
+          });
+        });
+      } catch {
+        continue;
+      }
+
+      for (const entry of entries) {
+        if (signal?.aborted || results.length >= maxResults) break;
+
+        const name = typeof entry === 'string' ? entry : entry.name;
+        if (
+          !name ||
+          name.startsWith('.') ||
+          name.startsWith('._') ||
+          name.startsWith('$') ||
+          name === 'node_modules' ||
+          name === 'AppData' ||
+          name === 'System Volume Information' ||
+          name === 'Recovery' ||
+          name === 'Thumbs.db' ||
+          name === 'desktop.ini' ||
+          name.endsWith('.pek') ||
+          name.endsWith('.cfa')
+        ) {
+          continue;
+        }
+
+        const isDir = typeof entry.isDirectory === 'function' ? entry.isDirectory() : false;
+        const fullPath = path.join(current.dir, name);
+
+        if (isDir) {
+          if (current.depth < maxDepth) {
+            queue.push({ dir: fullPath, depth: current.depth + 1 });
+          }
+        } else {
+          // File matching check
+          const lowerName = name.toLowerCase();
+          const matchesQuery = queryTokens.length === 0 || queryTokens.every(t => lowerName.includes(t));
+          if (!matchesQuery) continue;
+
+          const extIndex = name.lastIndexOf('.');
+          const ext = extIndex === -1 ? '' : name.slice(extIndex).toLowerCase();
+          const mediaType = this.getMediaType(ext);
+
+          if (mediaFilter !== 'all') {
+            if (mediaFilter === 'starred' && !starredSet.has(fullPath)) continue;
+            if (mediaFilter !== 'starred' && mediaType !== mediaFilter) continue;
+          }
+
+          // Calculate relative path from root
+          let relativePath = '';
+          if (fullPath.startsWith(cleanRoot)) {
+            relativePath = fullPath.slice(cleanRoot.length);
+            if (relativePath.startsWith('\\') || relativePath.startsWith('/')) {
+              relativePath = relativePath.slice(1);
+            }
+          }
+
+          const item: FileItem = {
+            name,
+            path: fullPath,
+            isDirectory: false,
+            size: 0,
+            sizeFormatted: '',
+            modifiedTime: Date.now(),
+            modifiedDateFormatted: '',
+            extension: ext,
+            mediaType,
+            isStarred: starredSet.has(fullPath),
+            labelColor: labelsMap[fullPath],
+            relativePath
+          };
+
+          results.push(item);
+          pendingBatch.push(item);
+
+          if (pendingBatch.length >= BATCH_SIZE) {
+            flushBatch();
+          }
+        }
+      }
+    }
+
+    flushBatch();
+    return results;
   }
 
   private fastNodeScan(fs: any, path: any, dirPath: string, starredSet: Set<string>, labelsMap: Record<string, string>): Promise<FileItem[] | null> {

@@ -32,7 +32,7 @@
   - `Enter`: Insert selected media directly onto the timeline playhead.
   - `Alt + ←` / `Cmd + ↑`: Return to parent folder.
   - `Arrows`: Smooth grid and list navigation.
-- **🏷️ Color Labels**: Tint folders and assets with vivid color dots (Apple Finder style) for instantaneous visual organization.
+- **🏷️ Color Labels**: Tint folders and assets with vivid color dots (Finder style) for instantaneous visual organization.
 - **🚀 Virtualized Progressive Rendering**: Open folders with **8,000+ files** in under **15ms** with zero RAM/CPU freeze.
 - **🎮 Hardware Decoding Toggle**: Dedicated GPU acceleration switch (NVDEC / D3D11 / Metal) for ultra-smooth playback.
 

@@ -142,42 +142,43 @@ export const Sidebar: React.FC<SidebarProps> = ({
     setExpandedPaths(next);
   };
 
-  const getLibraryIcon = (iconName: string) => {
+  const getLibraryIcon = (iconName: string, isSelected = false) => {
+    const iconColor = isSelected ? 'text-white' : undefined;
     switch (iconName) {
-      case 'music': return <Music className="w-3.5 h-3.5 text-pink-400" />;
-      case 'film': return <Film className="w-3.5 h-3.5 text-sky-400" />;
-      case 'sparkles': return <Sparkles className="w-3.5 h-3.5 text-amber-400" />;
-      case 'type': return <Type className="w-3.5 h-3.5 text-emerald-400" />;
-      case 'layers': return <Layers className="w-3.5 h-3.5 text-purple-400" />;
-      case 'download': return <Download className="w-3.5 h-3.5 text-teal-400" />;
-      case 'star': return <Star className="w-3.5 h-3.5 text-yellow-400" />;
-      case 'flame': return <Flame className="w-3.5 h-3.5 text-rose-500" />;
-      case 'image': return <ImageIcon className="w-3.5 h-3.5 text-blue-300" />;
-      case 'palette': return <Palette className="w-3.5 h-3.5 text-fuchsia-400" />;
-      case 'mic': return <Mic className="w-3.5 h-3.5 text-emerald-400" />;
-      case 'volume2': return <Volume2 className="w-3.5 h-3.5 text-rose-400" />;
-      case 'headphones': return <Headphones className="w-3.5 h-3.5 text-violet-400" />;
-      case 'disc': return <Disc className="w-3.5 h-3.5 text-amber-300" />;
-      case 'radio': return <Radio className="w-3.5 h-3.5 text-teal-400" />;
-      case 'clapperboard': return <Clapperboard className="w-3.5 h-3.5 text-blue-400" />;
-      case 'video': return <Video className="w-3.5 h-3.5 text-cyan-400" />;
-      case 'wand2': return <Wand2 className="w-3.5 h-3.5 text-purple-400" />;
-      case 'zap': return <Zap className="w-3.5 h-3.5 text-yellow-400" />;
-      case 'box': return <Box className="w-3.5 h-3.5 text-amber-500" />;
-      case 'crop': return <Crop className="w-3.5 h-3.5 text-sky-300" />;
-      case 'smile': return <Smile className="w-3.5 h-3.5 text-yellow-300" />;
-      case 'tag': return <Tag className="w-3.5 h-3.5 text-indigo-400" />;
-      case 'archive': return <Archive className="w-3.5 h-3.5 text-zinc-400" />;
-      case 'bookmark': return <Bookmark className="w-3.5 h-3.5 text-orange-400" />;
-      case 'briefcase': return <Briefcase className="w-3.5 h-3.5 text-amber-400" />;
-      case 'trophy': return <Trophy className="w-3.5 h-3.5 text-yellow-500" />;
-      case 'code': return <Code className="w-3.5 h-3.5 text-green-400" />;
-      case 'sliders': return <Sliders className="w-3.5 h-3.5 text-blue-400" />;
-      case 'shield': return <Shield className="w-3.5 h-3.5 text-emerald-500" />;
-      case 'heart': return <Heart className="w-3.5 h-3.5 text-pink-500" />;
-      case 'folder-heart': return <FolderHeart className="w-3.5 h-3.5 text-rose-400" />;
-      case 'tv': return <Tv className="w-3.5 h-3.5 text-indigo-400" />;
-      default: return <Folder className="w-3.5 h-3.5 text-apple-accent" />;
+      case 'music': return <Music className={`w-3.5 h-3.5 ${iconColor || 'text-pink-400'}`} />;
+      case 'film': return <Film className={`w-3.5 h-3.5 ${iconColor || 'text-sky-400'}`} />;
+      case 'sparkles': return <Sparkles className={`w-3.5 h-3.5 ${iconColor || 'text-amber-400'}`} />;
+      case 'type': return <Type className={`w-3.5 h-3.5 ${iconColor || 'text-emerald-400'}`} />;
+      case 'layers': return <Layers className={`w-3.5 h-3.5 ${iconColor || 'text-purple-400'}`} />;
+      case 'download': return <Download className={`w-3.5 h-3.5 ${iconColor || 'text-teal-400'}`} />;
+      case 'star': return <Star className={`w-3.5 h-3.5 ${iconColor || 'text-yellow-400'}`} />;
+      case 'flame': return <Flame className={`w-3.5 h-3.5 ${iconColor || 'text-rose-500'}`} />;
+      case 'image': return <ImageIcon className={`w-3.5 h-3.5 ${iconColor || 'text-blue-300'}`} />;
+      case 'palette': return <Palette className={`w-3.5 h-3.5 ${iconColor || 'text-fuchsia-400'}`} />;
+      case 'mic': return <Mic className={`w-3.5 h-3.5 ${iconColor || 'text-emerald-400'}`} />;
+      case 'volume2': return <Volume2 className={`w-3.5 h-3.5 ${iconColor || 'text-rose-400'}`} />;
+      case 'headphones': return <Headphones className={`w-3.5 h-3.5 ${iconColor || 'text-violet-400'}`} />;
+      case 'disc': return <Disc className={`w-3.5 h-3.5 ${iconColor || 'text-amber-300'}`} />;
+      case 'radio': return <Radio className={`w-3.5 h-3.5 ${iconColor || 'text-teal-400'}`} />;
+      case 'clapperboard': return <Clapperboard className={`w-3.5 h-3.5 ${iconColor || 'text-blue-400'}`} />;
+      case 'video': return <Video className={`w-3.5 h-3.5 ${iconColor || 'text-cyan-400'}`} />;
+      case 'wand2': return <Wand2 className={`w-3.5 h-3.5 ${iconColor || 'text-purple-400'}`} />;
+      case 'zap': return <Zap className={`w-3.5 h-3.5 ${iconColor || 'text-yellow-400'}`} />;
+      case 'box': return <Box className={`w-3.5 h-3.5 ${iconColor || 'text-amber-500'}`} />;
+      case 'crop': return <Crop className={`w-3.5 h-3.5 ${iconColor || 'text-sky-300'}`} />;
+      case 'smile': return <Smile className={`w-3.5 h-3.5 ${iconColor || 'text-yellow-300'}`} />;
+      case 'tag': return <Tag className={`w-3.5 h-3.5 ${iconColor || 'text-indigo-400'}`} />;
+      case 'archive': return <Archive className={`w-3.5 h-3.5 ${iconColor || 'text-zinc-400'}`} />;
+      case 'bookmark': return <Bookmark className={`w-3.5 h-3.5 ${iconColor || 'text-orange-400'}`} />;
+      case 'briefcase': return <Briefcase className={`w-3.5 h-3.5 ${iconColor || 'text-amber-400'}`} />;
+      case 'trophy': return <Trophy className={`w-3.5 h-3.5 ${iconColor || 'text-yellow-500'}`} />;
+      case 'code': return <Code className={`w-3.5 h-3.5 ${iconColor || 'text-green-400'}`} />;
+      case 'sliders': return <Sliders className={`w-3.5 h-3.5 ${iconColor || 'text-blue-400'}`} />;
+      case 'shield': return <Shield className={`w-3.5 h-3.5 ${iconColor || 'text-emerald-500'}`} />;
+      case 'heart': return <Heart className={`w-3.5 h-3.5 ${iconColor || 'text-pink-500'}`} />;
+      case 'folder-heart': return <FolderHeart className={`w-3.5 h-3.5 ${iconColor || 'text-rose-400'}`} />;
+      case 'tv': return <Tv className={`w-3.5 h-3.5 ${iconColor || 'text-indigo-400'}`} />;
+      default: return <Folder className={`w-3.5 h-3.5 ${iconColor || 'text-accent'}`} />;
     }
   };
 
@@ -196,29 +197,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
     >
       {/* Header with Pixel-Perfect Premiere Pro (Pr) Logo & Collapse */}
       <div className={`p-2.5 border-b border-white/10 flex items-center shrink-0 ${
-        isCollapsed ? 'justify-center' : 'justify-between gap-2 overflow-hidden'
+        isCollapsed ? 'justify-center' : 'justify-between gap-1 overflow-hidden'
       }`}>
         {isCollapsed ? (
           <button
             onClick={onToggleCollapse}
-            className="p-1 rounded-lg hover:bg-white/10 text-zinc-400 hover:text-white transition-colors flex items-center justify-center"
+            className="p-1 rounded-lg hover:bg-white/10 text-zinc-400 hover:text-white transition-colors flex items-center justify-center cursor-pointer"
             title="Expandir Barra Lateral"
           >
-            <PremiereLogo className="w-5 h-5" />
+            <PremiereLogo className="w-5 h-5" size={20} />
           </button>
         ) : (
           <>
-            <div className="flex items-center gap-2 min-w-0">
-              <PremiereLogo className="w-5 h-5" />
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <PremiereLogo className="w-5 h-5 shrink-0" size={20} />
               <span className="font-bold text-xs tracking-wider text-white uppercase truncate">
                 {t.explorerTitle}
               </span>
             </div>
 
-            <div className="flex items-center gap-0.5 shrink-0">
+            <div className="flex items-center gap-0.5 shrink-0 ml-auto">
               <button
                 onClick={onOpenSettings}
-                className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                 title="Configurações"
               >
                 <Settings className="w-3.5 h-3.5" />
@@ -226,7 +227,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
               <button
                 onClick={onToggleTheme}
-                className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                 title={themeMode === 'dark' ? "Mudar para Tema Claro" : "Mudar para Tema Escuro"}
               >
                 {themeMode === 'dark' ? (
@@ -238,7 +239,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
               <button
                 onClick={onToggleCollapse}
-                className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                 title="Recolher Barra Lateral"
               >
                 <PanelLeftClose className="w-4 h-4" />
@@ -281,12 +282,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div>
           {!isCollapsed && (
             <div className="px-2 mb-1 flex items-center justify-between">
-              <span className="text-[10px] font-bold text-apple-textMuted uppercase tracking-wider">
+              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
                 {t.sideMyLibs}
               </span>
               <button
                 onClick={onOpenAddLibraryModal}
-                className="p-0.5 rounded hover:bg-white/10 text-apple-accent hover:text-white transition-colors"
+                className="p-0.5 rounded hover:bg-white/10 text-accent hover:text-white transition-colors"
                 title="Adicionar Biblioteca"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -302,15 +303,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   key={lib.id}
                   className={`group/item flex items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-medium cursor-pointer transition-colors ${
                     isSelected
-                      ? 'bg-apple-accent text-white shadow-sm'
+                      ? 'bg-accent text-white shadow-sm'
                       : 'text-zinc-300 hover:bg-white/5 hover:text-white'
                   }`}
                   onClick={() => onSelectPath(lib.path)}
                   title={lib.path}
                 >
                   <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                    <span className="shrink-0">{getLibraryIcon(lib.icon)}</span>
-                    {!isCollapsed && <span className="truncate">{lib.name}</span>}
+                    <span className="shrink-0">{getLibraryIcon(lib.icon, isSelected)}</span>
+                    {!isCollapsed && (
+                      <span className={`truncate flex-1 min-w-0 font-medium ${
+                        isSelected ? 'text-white font-semibold' : 'text-zinc-200'
+                      }`}>
+                        {lib.name}
+                      </span>
+                    )}
                   </div>
 
                   {!isCollapsed && (
@@ -332,9 +339,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {localLibraries.length === 0 && !isCollapsed && (
               <button
                 onClick={onOpenAddLibraryModal}
-                className="w-full p-2 rounded-xl border border-dashed border-white/15 hover:border-apple-accent/60 bg-white/[0.02] hover:bg-apple-accent/5 text-center text-zinc-400 hover:text-white transition-all group"
+                className="w-full p-2 rounded-xl border border-dashed border-white/15 hover:border-accent/60 bg-white/[0.02] hover:bg-accent/5 text-center text-zinc-400 hover:text-white transition-all group"
               >
-                <Sparkles className="w-3.5 h-3.5 mx-auto mb-0.5 text-apple-accent group-hover:scale-110 transition-transform" />
+                <Sparkles className="w-3.5 h-3.5 mx-auto mb-0.5 text-accent group-hover:scale-110 transition-transform" />
                 <div className="text-[10px] font-semibold text-zinc-200">Adicionar Pastas</div>
               </button>
             )}
@@ -344,7 +351,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* 💾 Discos Locais */}
         <div>
           {!isCollapsed && (
-            <div className="px-2 mb-1 text-[10px] font-bold text-apple-textMuted uppercase tracking-wider">
+            <div className="px-2 mb-1 text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
               {t.sideLocalDrives}
             </div>
           )}
@@ -361,7 +368,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={() => onSelectPath(drive.path)}
                     className={`flex items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-medium cursor-pointer transition-colors ${
                       isSelected
-                        ? 'bg-apple-accent text-white shadow-sm'
+                        ? 'bg-accent text-white shadow-sm'
                         : 'text-zinc-300 hover:bg-white/5 hover:text-white'
                     }`}
                     title={drive.path}
@@ -393,7 +400,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             onClick={() => onSelectPath(sub.path)}
                             className={`flex items-center gap-2 px-2 py-1 rounded-lg text-xs cursor-pointer truncate transition-colors ${
                               isSubSelected
-                                ? 'bg-apple-accent text-white font-medium shadow-sm'
+                                ? 'bg-accent text-white font-medium shadow-sm'
                                 : 'text-zinc-400 hover:text-white hover:bg-white/5'
                             }`}
                             title={sub.path}
@@ -414,7 +421,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* ☁️ Armazenamento em Nuvem */}
         <div>
           {!isCollapsed && (
-            <div className="px-2 mb-1 text-[10px] font-bold text-apple-textMuted uppercase tracking-wider">
+            <div className="px-2 mb-1 text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
               {t.sideCloudDrives}
             </div>
           )}
@@ -431,7 +438,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={() => onSelectPath(drive.path)}
                     className={`flex items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-medium cursor-pointer transition-colors ${
                       isSelected
-                        ? 'bg-apple-accent text-white shadow-sm'
+                        ? 'bg-accent text-white shadow-sm'
                         : 'text-zinc-300 hover:bg-white/5 hover:text-white'
                     }`}
                     title={drive.path}
@@ -463,7 +470,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             onClick={() => onSelectPath(sub.path)}
                             className={`flex items-center gap-2 px-2 py-1 rounded-lg text-xs cursor-pointer truncate transition-colors ${
                               isSubSelected
-                                ? 'bg-apple-accent text-white font-medium shadow-sm'
+                                ? 'bg-accent text-white font-medium shadow-sm'
                                 : 'text-zinc-400 hover:text-white hover:bg-white/5'
                             }`}
                             title={sub.path}
@@ -487,7 +494,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   key={lib.id}
                   className={`group/item flex items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-medium cursor-pointer transition-colors ${
                     isSelected
-                      ? 'bg-apple-accent text-white shadow-sm'
+                      ? 'bg-accent text-white shadow-sm'
                       : 'text-zinc-300 hover:bg-white/5 hover:text-white'
                   }`}
                   onClick={() => onSelectPath(lib.path)}
@@ -518,14 +525,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="p-2 border-t border-white/10">
+      <div className="p-2 border-t border-white/10 shrink-0">
         <button
           onClick={onOpenAddLibraryModal}
-          className="w-full flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl apple-button text-xs font-medium text-zinc-300 hover:text-white"
+          className={`rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-zinc-300 hover:text-white transition-all flex items-center justify-center cursor-pointer ${
+            isCollapsed ? 'w-8 h-8 mx-auto' : 'w-full py-1.5 px-2 gap-1.5'
+          }`}
           title={t.sideNewLib}
         >
-          <Plus className="w-3.5 h-3.5 text-apple-accent" />
-          {!isCollapsed && <span>{t.sideNewLib}</span>}
+          <Plus className="w-3.5 h-3.5 text-accent shrink-0" />
+          {!isCollapsed && <span className="truncate">{t.sideNewLib}</span>}
         </button>
       </div>
 
@@ -536,7 +545,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           setIsResizing(true);
         }}
         onDoubleClick={onToggleCollapse}
-        className="absolute top-0 right-0 w-1.5 h-full cursor-col-resize hover:bg-apple-accent/50 transition-colors z-30"
+        className="absolute top-0 right-0 w-1.5 h-full cursor-col-resize hover:bg-accent/50 transition-colors z-30"
         title="Arraste para redimensionar"
       />
     </aside>

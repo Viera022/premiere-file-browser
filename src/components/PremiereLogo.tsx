@@ -1,9 +1,12 @@
 import React from 'react';
 
-export const PremiereLogo: React.FC<{ className?: string }> = ({ className = "w-5 h-5" }) => {
+export const PremiereLogo: React.FC<{ className?: string; size?: number }> = ({ className = "w-5 h-5", size = 20 }) => {
   return (
     <svg 
       className={`shrink-0 select-none rounded-[5px] shadow-sm ${className}`}
+      style={{ width: size, height: size }}
+      width={size}
+      height={size}
       viewBox="0 0 48 48" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg"

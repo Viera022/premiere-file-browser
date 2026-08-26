@@ -66,7 +66,7 @@ export const App: React.FC = () => {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
   const [isFavoritesView, setIsFavoritesView] = useState(false);
-  const [isHomeView, setIsHomeView] = useState(true);
+  const [isHomeView, setIsHomeView] = useState<boolean>(true);
   const [favoritesCount, setFavoritesCount] = useState(0);
 
   const [files, setFiles] = useState<FileItem[]>([]);
@@ -85,6 +85,20 @@ export const App: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sortOption, setSortOption] = useState<SortOption>('name');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+
+  // Recursive Search State
+  const [isRecursiveSearch, setIsRecursiveSearch] = useState<boolean>(() => {
+    return localStorage.getItem('filebrowser_recursive_search') === 'true';
+  });
+  const [isSearchingRecursive, setIsSearchingRecursive] = useState(false);
+  const [recursiveResults, setRecursiveResults] = useState<FileItem[]>([]);
+  const recursiveAbortControllerRef = useRef<AbortController | null>(null);
+
+  const handleToggleRecursiveSearch = () => {
+    const nextVal = !isRecursiveSearch;
+    setIsRecursiveSearch(nextVal);
+    localStorage.setItem('filebrowser_recursive_search', nextVal ? 'true' : 'false');
+  };
 
   const updateFavoritesCount = useCallback(() => {
     const starred = fileSystemService.getStarredPaths();
@@ -249,10 +263,71 @@ export const App: React.FC = () => {
     handleNavigateHome();
   };
 
+  // Asynchronous Recursive Search Pipeline
+  useEffect(() => {
+    if (isHomeView || isFavoritesView || !isRecursiveSearch || !searchQuery.trim()) {
+      if (recursiveAbortControllerRef.current) {
+        recursiveAbortControllerRef.current.abort();
+        recursiveAbortControllerRef.current = null;
+      }
+      setIsSearchingRecursive(false);
+      setRecursiveResults([]);
+      return;
+    }
+
+    if (recursiveAbortControllerRef.current) {
+      recursiveAbortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    recursiveAbortControllerRef.current = controller;
+
+    setRecursiveResults([]);
+    setIsSearchingRecursive(true);
+
+    const debounceTimer = setTimeout(() => {
+      fileSystemService.searchRecursive(
+        currentPath,
+        searchQuery,
+        mediaFilter,
+        { maxDepth: 6, maxResults: 600 },
+        (batch) => {
+          if (!controller.signal.aborted) {
+            setRecursiveResults(prev => [...prev, ...batch]);
+          }
+        },
+        controller.signal
+      )
+        .then((finalResults) => {
+          if (!controller.signal.aborted) {
+            setRecursiveResults(finalResults);
+            setIsSearchingRecursive(false);
+          }
+        })
+        .catch(() => {
+          if (!controller.signal.aborted) {
+            setIsSearchingRecursive(false);
+          }
+        });
+    }, 200);
+
+    return () => {
+      clearTimeout(debounceTimer);
+      controller.abort();
+    };
+  }, [currentPath, searchQuery, mediaFilter, isRecursiveSearch, isHomeView, isFavoritesView]);
+
   const filteredItems = useMemo(() => {
     if (isHomeView) return [];
-    return files
+
+    const isRecursiveActive = isRecursiveSearch && searchQuery.trim().length > 0;
+    const baseList = isRecursiveActive ? recursiveResults : files;
+
+    return baseList
       .filter((item) => {
+        if (isRecursiveActive) {
+          // Already filtered by query and mediaType during recursive scan
+          return true;
+        }
         if (mediaFilter === 'starred') {
           if (!item.isStarred) return false;
         } else if (mediaFilter !== 'all' && !item.isDirectory && item.mediaType !== mediaFilter) {
@@ -274,7 +349,7 @@ export const App: React.FC = () => {
 
         return sortOrder === 'asc' ? result : -result;
       });
-  }, [files, mediaFilter, searchQuery, sortOption, sortOrder, isHomeView]);
+  }, [files, recursiveResults, isRecursiveSearch, mediaFilter, searchQuery, sortOption, sortOrder, isHomeView]);
 
   const handleNavigateUp = useCallback(() => {
     const parts = currentPath.split(/\\|\//).filter(Boolean);
@@ -285,6 +360,13 @@ export const App: React.FC = () => {
       setCurrentPath(parent);
     }
   }, [currentPath]);
+
+  const handleNavigateToParentFolder = useCallback((folderPath: string) => {
+    setIsHomeView(false);
+    setIsFavoritesView(false);
+    setCurrentPath(folderPath);
+    setSearchQuery('');
+  }, []);
 
   // Keyboard navigation
   useEffect(() => {
@@ -355,12 +437,12 @@ export const App: React.FC = () => {
 
   return (
     <div 
-      className={`flex h-full w-full overflow-hidden relative theme-${themeMode} ${hwAccelEnabled ? 'transform-gpu' : ''}`}
+      className={`flex h-screen w-screen overflow-hidden relative theme-${themeMode} ${hwAccelEnabled ? 'transform-gpu' : ''}`}
       onClick={() => setContextMenu(null)}
     >
       {/* Toast Feedback */}
       {timelineFeedback && (
-        <div className="absolute top-3 right-4 z-50 px-3 py-1.5 rounded-xl bg-emerald-500/90 backdrop-blur-md text-white text-xs font-semibold shadow-2xl animate-fade-in flex items-center gap-2 border border-emerald-400/30">
+        <div className="absolute top-3 right-4 z-50 px-3 py-1.5 rounded-xl bg-emerald-500 text-white text-xs font-semibold shadow-2xl animate-fade-in flex items-center gap-2 border border-emerald-400/30">
           <div className="w-2 h-2 rounded-full bg-white animate-ping" />
           <span>{timelineFeedback}</span>
         </div>
@@ -420,6 +502,10 @@ export const App: React.FC = () => {
           }}
           gridSize={gridSize}
           onGridSizeChange={handleGridSizeChange}
+          isRecursiveSearch={isRecursiveSearch}
+          onToggleRecursiveSearch={handleToggleRecursiveSearch}
+          isSearchingRecursive={isSearchingRecursive}
+          recursiveMatchCount={filteredItems.length}
         />
 
         {isHomeView ? (
@@ -437,7 +523,7 @@ export const App: React.FC = () => {
           />
         ) : isLoading ? (
           <div className="flex-1 flex flex-col items-center justify-center text-zinc-400">
-            <div className="w-5 h-5 border-2 border-apple-accent border-t-transparent rounded-full animate-spin mb-2" />
+            <div className="w-5 h-5 border-2 border-accent border-t-transparent rounded-full animate-spin mb-2" />
             <span className="text-xs">Carregando...</span>
           </div>
         ) : viewMode === 'grid' ? (
@@ -493,6 +579,7 @@ export const App: React.FC = () => {
           onToggleStar={handleToggleStar}
           onQuickLook={setQuickLookItem}
           onSetLabelColor={handleSetLabelColor}
+          onNavigateToParentFolder={handleNavigateToParentFolder}
         />
       )}
 

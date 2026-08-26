@@ -52,8 +52,8 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in select-none">
-      <div className="w-full max-w-md bg-zinc-900 border border-white/15 rounded-3xl p-6 shadow-2xl flex flex-col justify-between min-h-[440px] animate-scale-in relative overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 animate-fade-in select-none">
+      <div className="w-full max-w-md bg-zinc-900 border border-white/15 rounded-3xl p-5 shadow-2xl flex flex-col justify-between max-h-[92vh] overflow-y-auto custom-scrollbar animate-scale-in relative">
         {/* Top Progress Dots */}
         <div className="flex items-center justify-center gap-1.5 mb-3">
           {[1, 2, 3].map((s) => (
@@ -61,7 +61,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
               key={s}
               className={`h-1 rounded-full transition-all duration-300 ${
                 step === s 
-                  ? 'w-7 bg-apple-accent' 
+                  ? 'w-7 bg-accent' 
                   : step > s 
                   ? 'w-3 bg-emerald-500' 
                   : 'w-2 bg-white/20'
@@ -74,7 +74,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         {step === 1 && (
           <div className="flex-1 flex flex-col items-center justify-center text-center my-auto animate-fade-in">
             <div className="w-13 h-13 rounded-2xl bg-black/60 border border-white/10 shadow-xl flex items-center justify-center mb-2.5 p-2.5">
-              <PremiereLogo className="w-8 h-8" />
+              <PremiereLogo className="w-8 h-8" size={32} />
             </div>
 
             <h2 className="text-base font-bold text-white mb-1">
@@ -86,7 +86,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
             {/* Language Selector Pills with Crisp Vector SVG Flags */}
             <div className="w-full max-w-xs mb-4 text-left">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-apple-textMuted mb-1.5 flex items-center gap-1">
+              <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5 flex items-center gap-1">
                 <Globe className="w-3 h-3 text-sky-400" />
                 <span>{t.selectLanguage}</span>
               </label>
@@ -99,7 +99,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                       onClick={() => handleLangChange(l.code)}
                       className={`py-1.5 px-1 rounded-xl text-[10px] font-semibold border transition-all flex flex-col items-center gap-1 ${
                         isSelected 
-                          ? 'bg-apple-accent text-white border-apple-accent shadow-md scale-105' 
+                          ? 'bg-accent text-white border-accent shadow-md scale-105' 
                           : 'bg-white/5 text-zinc-400 border-white/10 hover:text-white hover:bg-white/10'
                       }`}
                       title={l.nativeName}
@@ -115,7 +115,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             {/* User Name Input */}
             <div className="w-full max-w-xs text-left">
               <label className="block text-[11px] font-semibold text-zinc-300 mb-1 flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-apple-accent" />
+                <User className="w-3.5 h-3.5 text-accent" />
                 <span>{t.whatName}</span>
               </label>
               <input
@@ -127,7 +127,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 }}
                 placeholder={t.namePlaceholder}
                 autoFocus
-                className="w-full px-3.5 py-2 text-xs rounded-xl bg-white/5 border border-white/15 text-white placeholder-zinc-500 focus:outline-none focus:border-apple-accent transition-colors"
+                className="w-full px-3.5 py-2 text-xs rounded-xl bg-white/5 border border-white/15 text-white placeholder-zinc-500 focus:outline-none focus:border-accent transition-colors"
               />
             </div>
           </div>
@@ -136,7 +136,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         {/* Step 2: Atalhos Turbo de Teclado */}
         {step === 2 && (
           <div className="flex-1 flex flex-col items-center justify-center text-center my-auto animate-fade-in">
-            <div className="w-12 h-12 rounded-2xl bg-apple-accent/10 border border-apple-accent/20 flex items-center justify-center mb-3 text-apple-accent">
+            <div className="w-12 h-12 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-3 text-accent">
               <Keyboard className="w-6 h-6" />
             </div>
 
@@ -157,7 +157,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
               <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
                 <span className="text-xs text-zinc-300">{t.shortcuts.insertTimeline}</span>
-                <kbd className="px-2 py-0.5 rounded bg-apple-accent text-white font-mono font-bold text-[10px]">
+                <kbd className="px-2 py-0.5 rounded bg-accent text-white font-mono font-bold text-[10px]">
                   Enter
                 </kbd>
               </div>
@@ -237,7 +237,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           {step < 3 ? (
             <button
               onClick={() => setStep(step + 1)}
-              className="px-4 py-2 rounded-xl bg-apple-accent hover:bg-apple-accentHover text-white text-xs font-semibold flex items-center gap-1.5 shadow-lg transition-all"
+              className="px-4 py-2 rounded-xl bg-accent hover:bg-accent-hover text-white text-xs font-semibold flex items-center gap-1.5 shadow-lg transition-all"
             >
               <span>{t.btnNext}</span>
               <ArrowRight className="w-3.5 h-3.5" />

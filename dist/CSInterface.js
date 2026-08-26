@@ -477,7 +477,13 @@ function CSInterface()
 CSInterface.THEME_COLOR_CHANGED_EVENT = "com.adobe.csxs.events.ThemeColorChanged";
 
 /** The host environment data object. */
-CSInterface.prototype.hostEnvironment = JSON.parse(window.__adobe_cep__.getHostEnvironment());
+try {
+    CSInterface.prototype.hostEnvironment = (typeof window.__adobe_cep__ !== "undefined" && window.__adobe_cep__ && typeof window.__adobe_cep__.getHostEnvironment === "function")
+        ? JSON.parse(window.__adobe_cep__.getHostEnvironment())
+        : { appName: "PPRO", appVersion: "24.0", appId: "PPRO" };
+} catch(e) {
+    CSInterface.prototype.hostEnvironment = { appName: "PPRO", appVersion: "24.0", appId: "PPRO" };
+}
 
 /** Retrieves information about the host environment in which the
  *  extension is currently running.
@@ -486,7 +492,11 @@ CSInterface.prototype.hostEnvironment = JSON.parse(window.__adobe_cep__.getHostE
  */
 CSInterface.prototype.getHostEnvironment = function()
 {
-    this.hostEnvironment = JSON.parse(window.__adobe_cep__.getHostEnvironment());
+    try {
+        if (typeof window.__adobe_cep__ !== "undefined" && window.__adobe_cep__ && typeof window.__adobe_cep__.getHostEnvironment === "function") {
+            this.hostEnvironment = JSON.parse(window.__adobe_cep__.getHostEnvironment());
+        }
+    } catch(e) {}
     return this.hostEnvironment;
 };
 

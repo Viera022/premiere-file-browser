@@ -13,6 +13,7 @@ export interface FileItem {
   thumbnailUrl?: string;
   isStarred?: boolean;
   labelColor?: string;
+  relativePath?: string;
 }
 
 export interface DriveItem {

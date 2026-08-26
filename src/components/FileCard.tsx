@@ -277,7 +277,7 @@ export const FileCard: React.FC<FileCardProps> = memo(({
           {/* Scrub Floating Timecode Badge */}
           {hoverScrubEnabled && scrubTimecode && isHovered && (
             <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-black/85 border border-white/20 text-[8px] font-mono font-bold text-white flex items-center gap-1 shadow-2xl z-20 animate-fade-in">
-              <span className="w-1.5 h-1.5 rounded-full bg-apple-accent animate-ping" />
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
               <span>{scrubTimecode}</span>
             </div>
           )}
@@ -300,7 +300,7 @@ export const FileCard: React.FC<FileCardProps> = memo(({
           {isActive && shouldMountVideo && (
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/60 z-20">
               <div 
-                className="h-full bg-apple-accent shadow-md shadow-apple-accent/50 transition-all duration-75"
+                className="h-full bg-accent shadow-md shadow-accent/50 transition-all duration-75"
                 style={{ width: `${videoProgress}%` }}
               />
               {hoverScrubEnabled && scrubPosition !== null && (
@@ -455,7 +455,7 @@ export const FileCard: React.FC<FileCardProps> = memo(({
 
         {/* Bottom-Right Action Buttons */}
         {!item.isDirectory && isActive && (
-          <div className="absolute bottom-1.5 right-1.5 flex items-center gap-1 z-20 animate-fade-in bg-black/70 p-0.5 rounded-lg border border-white/10 backdrop-blur-sm shadow-lg">
+          <div className="absolute bottom-1.5 right-1.5 flex items-center gap-1 z-20 animate-fade-in bg-black/90 p-0.5 rounded-lg border border-white/10 shadow-lg">
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -468,7 +468,7 @@ export const FileCard: React.FC<FileCardProps> = memo(({
             </button>
             <button
               onClick={handleInsertTimeline}
-              className="p-1 rounded-md bg-apple-accent hover:bg-apple-accentHover text-white shadow-sm transition-colors"
+              className="p-1 rounded-md bg-accent hover:bg-accent-hover text-white shadow-sm transition-colors"
               title="Inserir na Timeline (Enter)"
             >
               <PlusCircle className="w-3 h-3" />
@@ -498,8 +498,16 @@ export const FileCard: React.FC<FileCardProps> = memo(({
             {item.name}
           </span>
         </div>
+
+        {item.relativePath && (
+          <div className="text-[8px] text-zinc-500 truncate font-mono mt-0.5" title={item.relativePath}>
+            {item.relativePath.includes('\\') || item.relativePath.includes('/') 
+              ? item.relativePath.substring(0, Math.max(item.relativePath.lastIndexOf('\\'), item.relativePath.lastIndexOf('/')))
+              : ''}
+          </div>
+        )}
         
-        <div className="flex items-center justify-between mt-1 text-[8px] text-apple-textMuted">
+        <div className="flex items-center justify-between mt-1 text-[8px] text-zinc-400">
           <span className="truncate">{item.isDirectory ? 'Pasta' : item.sizeFormatted}</span>
           <span className={`uppercase text-[7px] px-1 py-0.2 rounded font-semibold shrink-0 ${
             isSelected ? 'bg-white/20 text-white' : 'bg-white/5 text-zinc-400'

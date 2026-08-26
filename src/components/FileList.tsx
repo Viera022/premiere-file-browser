@@ -184,7 +184,7 @@ export const FileList: React.FC<FileListProps> = ({
       />
 
       <div className="w-full text-left">
-        <div className="flex items-center justify-between px-2.5 py-1.5 text-[10px] font-bold text-apple-textMuted uppercase border-b border-white/5">
+        <div className="flex items-center justify-between px-2.5 py-1.5 text-[10px] font-bold text-zinc-400 uppercase border-b border-white/5">
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-amber-400 w-4 text-center">⭐</span>
             <span>Nome</span>
@@ -258,21 +258,30 @@ export const FileList: React.FC<FileListProps> = ({
                     )}
                   </div>
 
-                  <span className="truncate font-medium flex items-center gap-1.5" title={item.name}>
-                    {labelConfig && (
-                      <span 
-                        style={{ backgroundColor: labelConfig.dot }} 
-                        className="w-1.5 h-1.5 rounded-full shrink-0" 
-                      />
-                    )}
-                    {item.name}
-                    {isPlaying && item.mediaType === 'audio' && (
-                      <span className="px-1 py-0.2 rounded bg-pink-500/30 text-pink-300 text-[8px] font-bold uppercase animate-pulse flex items-center gap-0.5">
-                        <Volume2 className="w-2.5 h-2.5" />
-                        <span>Tocando</span>
+                  <div className="flex flex-col min-w-0 flex-1">
+                    <span className="truncate font-medium flex items-center gap-1.5" title={item.name}>
+                      {labelConfig && (
+                        <span 
+                          style={{ backgroundColor: labelConfig.dot }} 
+                          className="w-1.5 h-1.5 rounded-full shrink-0" 
+                        />
+                      )}
+                      {item.name}
+                      {isPlaying && item.mediaType === 'audio' && (
+                        <span className="px-1 py-0.2 rounded bg-pink-500/30 text-pink-300 text-[8px] font-bold uppercase animate-pulse flex items-center gap-0.5">
+                          <Volume2 className="w-2.5 h-2.5" />
+                          <span>Tocando</span>
+                        </span>
+                      )}
+                    </span>
+                    {item.relativePath && (
+                      <span className="text-[9px] text-zinc-500 font-mono truncate" title={item.relativePath}>
+                        {item.relativePath.includes('\\') || item.relativePath.includes('/')
+                          ? item.relativePath.substring(0, Math.max(item.relativePath.lastIndexOf('\\'), item.relativePath.lastIndexOf('/')))
+                          : ''}
                       </span>
                     )}
-                  </span>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0 ml-2">
@@ -301,7 +310,7 @@ export const FileList: React.FC<FileListProps> = ({
                         </button>
                         <button
                           onClick={(e) => handleInsertTimeline(item, e)}
-                          className={`p-1 rounded bg-apple-accent hover:bg-apple-accentHover text-white transition-opacity shadow ${
+                          className={`p-1 rounded bg-accent hover:bg-accent-hover text-white transition-opacity shadow ${
                             isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                           }`}
                           title="Inserir na Timeline (Enter)"
