@@ -449,6 +449,7 @@ export const App: React.FC = () => {
       )}
 
       <Sidebar
+        language={language}
         currentPath={currentPath}
         isFavoritesView={isFavoritesView && !isHomeView}
         favoritesCount={favoritesCount}
@@ -472,6 +473,7 @@ export const App: React.FC = () => {
 
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         <Toolbar
+          language={language}
           currentPath={isHomeView ? '🏠 Início' : isFavoritesView ? '⭐ Meus Favoritos' : currentPath}
           volume={previewVolume}
           onVolumeChange={handleVolumeChange}

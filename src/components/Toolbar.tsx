@@ -23,8 +23,10 @@ import {
   Type
 } from 'lucide-react';
 import { MediaFilter, SortOption, SortOrder, ViewMode } from '../types';
+import { Language, getTranslation } from '../i18n/translations';
 
 interface ToolbarProps {
+  language?: Language;
   currentPath: string;
   volume: number;
   onVolumeChange: (vol: number) => void;
@@ -51,6 +53,7 @@ interface ToolbarProps {
 }
 
 export const Toolbar: React.FC<ToolbarProps> = ({
+  language = 'pt',
   currentPath,
   volume = 0.75,
   onVolumeChange,
@@ -72,19 +75,20 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   isSearchingRecursive = false,
   recursiveMatchCount = 0
 }) => {
+  const t = getTranslation(language);
   const isFavorites = currentPath === '⭐ Meus Favoritos';
   const isHome = currentPath === '🏠 Início';
   const pathParts = isFavorites ? ['⭐ Meus Favoritos'] : isHome ? ['🏠 Início'] : currentPath.split(/\\|\//).filter(Boolean);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
   const filterTabs: { id: MediaFilter; label: string; icon: React.ReactNode }[] = [
-    { id: 'all', label: 'Tudo', icon: null },
-    { id: 'starred', label: 'Favoritos', icon: <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> },
-    { id: 'video', label: 'Vídeos', icon: <Film className="w-3 h-3 text-sky-400" /> },
-    { id: 'audio', label: 'SFX & Áudio', icon: <Music className="w-3 h-3 text-pink-400" /> },
-    { id: 'image', label: 'Imagens', icon: <ImageIcon className="w-3 h-3 text-emerald-400" /> },
-    { id: 'mogrt', label: 'MOGRTs', icon: <Sparkles className="w-3 h-3 text-purple-400" /> },
-    { id: 'font', label: 'Fontes', icon: <Type className="w-3 h-3 text-amber-400" /> },
+    { id: 'all', label: t.tabAll, icon: null },
+    { id: 'starred', label: t.tabStarred, icon: <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> },
+    { id: 'video', label: t.tabVideo, icon: <Film className="w-3 h-3 text-sky-400" /> },
+    { id: 'audio', label: t.tabAudio, icon: <Music className="w-3 h-3 text-pink-400" /> },
+    { id: 'image', label: t.tabImage, icon: <ImageIcon className="w-3 h-3 text-emerald-400" /> },
+    { id: 'mogrt', label: t.tabMogrt, icon: <Sparkles className="w-3 h-3 text-purple-400" /> },
+    { id: 'font', label: t.tabFont, icon: <Type className="w-3 h-3 text-amber-400" /> },
   ];
 
   const getVolumeIcon = () => {
@@ -262,7 +266,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder={isRecursiveSearch ? "Buscar tudo..." : "Buscar..."}
+            placeholder={isRecursiveSearch ? t.searchPlaceholderDeep : t.searchPlaceholder}
             className={`w-full h-7 pl-8 pr-14 text-xs rounded-lg bg-white/5 border text-white placeholder-zinc-500 focus:outline-none transition-all ${
               isRecursiveSearch 
                 ? 'border-accent/60 bg-accent/5 focus:border-accent shadow-[0_0_10px_rgba(10,132,255,0.15)]' 

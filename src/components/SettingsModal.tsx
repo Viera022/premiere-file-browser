@@ -225,10 +225,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <button
             onClick={() => setShouldSimulateCrash(true)}
             className="w-full py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-[11px] font-semibold text-rose-300 hover:text-rose-200 flex items-center justify-center gap-1.5 transition-colors"
-            title="Simular um erro visual para ver a tela de proteção e recuperação"
+            title={t.simulateCrashTooltip}
           >
             <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
-            <span>🚨 Simular Crash de Teste</span>
+            <span>🚨 {t.simulateCrash}</span>
           </button>
         </div>
 
