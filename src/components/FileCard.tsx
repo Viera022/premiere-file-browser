@@ -65,11 +65,33 @@ export const FileCard: React.FC<FileCardProps> = memo(({
 
   const labelConfig = item.labelColor ? LABEL_COLORS.find(c => c.id === item.labelColor) : null;
 
+  // Synchronize thumbnail URL state when file item changes
   useEffect(() => {
-    if (item.thumbnailUrl) {
-      setThumbUrl(item.thumbnailUrl);
+    setThumbUrl(item.thumbnailUrl);
+  }, [item.path, item.thumbnailUrl]);
+
+  // Dynamic Thumbnail Fetching Pipeline on mount/load
+  useEffect(() => {
+    let isMounted = true;
+    if (item.mediaType === 'video' && !thumbUrl) {
+      fileSystemService.generateVideoThumbnail(item.path)
+        .then((url) => {
+          if (isMounted && url) {
+            setThumbUrl(url);
+          }
+        });
+    } else if (item.mediaType === 'mogrt' && !thumbUrl) {
+      fileSystemService.extractMogrtThumb(item.path)
+        .then((url) => {
+          if (isMounted && url) {
+            setThumbUrl(url);
+          }
+        });
     }
-  }, [item.thumbnailUrl]);
+    return () => {
+      isMounted = false;
+    };
+  }, [item.path, item.mediaType, thumbUrl]);
 
   useEffect(() => {
     if (videoRef.current) {

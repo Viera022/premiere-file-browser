@@ -262,7 +262,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder={isRecursiveSearch ? "Buscar em subpastas..." : "Buscar nesta pasta..."}
+            placeholder={isRecursiveSearch ? "Buscar tudo..." : "Buscar..."}
             className={`w-full h-7 pl-8 pr-14 text-xs rounded-lg bg-white/5 border text-white placeholder-zinc-500 focus:outline-none transition-all ${
               isRecursiveSearch 
                 ? 'border-accent/60 bg-accent/5 focus:border-accent shadow-[0_0_10px_rgba(10,132,255,0.15)]' 
