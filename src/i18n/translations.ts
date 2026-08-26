@@ -108,7 +108,20 @@ export const TRANSLATIONS: Record<Language, any> = {
     hoverScrubSub: 'Escanear frames de vídeo ao mover o cursor sobre o card',
     hwAccelLabel: 'Decodificação por Hardware (GPU)',
     hwAccelSub: 'Acelerar reprodução de vídeo e áudio usando placa de vídeo dedicada',
-    replayTour: 'Rever Tour de Boas-Vindas (Onboarding)'
+    replayTour: 'Rever Tour de Boas-Vindas (Onboarding)',
+
+    // Crash Report & Error Boundary
+    crashTitle: 'Ops! Ocorreu uma instabilidade inesperada',
+    crashSub: 'O painel encontrou um erro e pausou a execução para proteger seu projeto no Premiere Pro.',
+    crashCopyBtn: 'Copiar Relatório de Diagnóstico',
+    crashCopied: 'Relatório Copiado para a Área de Transferência! ✓',
+    crashGitHubBtn: 'Abrir Issue no GitHub',
+    crashReloadBtn: 'Recarregar Painel',
+    crashResetBtn: 'Limpar Cache & Reiniciar',
+    crashTutorialTitle: 'O que fazer agora:',
+    crashStep1: '1. Clique no botão acima para copiar o relatório técnico.',
+    crashStep2: '2. Abra uma Issue no GitHub para nossa equipe corrigir.',
+    crashStep3: '3. Clique em "Recarregar Painel" para voltar a editar normalmente.'
   },
 
   en: {
@@ -203,7 +216,20 @@ export const TRANSLATIONS: Record<Language, any> = {
     hoverScrubSub: 'Scrub video frames by moving the mouse over cards',
     hwAccelLabel: 'Hardware Decoding (GPU)',
     hwAccelSub: 'Accelerate video & audio previews using dedicated graphics card',
-    replayTour: 'Replay Welcome Tour (Onboarding)'
+    replayTour: 'Replay Welcome Tour (Onboarding)',
+
+    // Crash Report & Error Boundary
+    crashTitle: 'Oops! Something went wrong',
+    crashSub: 'The panel encountered an unexpected issue and paused safely to protect your Premiere Pro project.',
+    crashCopyBtn: 'Copy Diagnostic Report',
+    crashCopied: 'Report Copied to Clipboard! ✓',
+    crashGitHubBtn: 'Open Issue on GitHub',
+    crashReloadBtn: 'Reload Panel',
+    crashResetBtn: 'Clear Cache & Restart',
+    crashTutorialTitle: 'What to do next:',
+    crashStep1: '1. Click the button above to copy the diagnostic report.',
+    crashStep2: '2. Open an Issue on GitHub so we can fix it.',
+    crashStep3: '3. Click "Reload Panel" to resume editing smoothly.'
   },
 
   es: {
@@ -272,7 +298,7 @@ export const TRANSLATIONS: Record<Language, any> = {
     explorerTitle: 'Explorador',
     sideFavorites: 'Favoritos',
     sideMyLibs: 'Mis Bibliotecas',
-    sideLocalDrives: 'Discos Locales',
+    sideLocalDrives: 'Discos Locais',
     sideCloudDrives: 'Almacenamiento en la Nube',
     sideNewLib: 'Nueva Biblioteca',
 
@@ -298,7 +324,20 @@ export const TRANSLATIONS: Record<Language, any> = {
     hoverScrubSub: 'Escanear fotogramas al mover el ratón sobre la tarjeta',
     hwAccelLabel: 'Decodificación por Hardware (GPU)',
     hwAccelSub: 'Acelerar vistas previas usando tarjeta gráfica dedicada',
-    replayTour: 'Ver Tour de Bienvenida (Onboarding)'
+    replayTour: 'Ver Tour de Bienvenida (Onboarding)',
+
+    // Crash Report & Error Boundary
+    crashTitle: '¡Ups! Ocurrió un error inesperado',
+    crashSub: 'El panel encontró un problema y se pausó de forma segura para proteger tu proyecto.',
+    crashCopyBtn: 'Copiar Informe de Diagnóstico',
+    crashCopied: '¡Informe Copiado al Portapapeles! ✓',
+    crashGitHubBtn: 'Abrir Issue en GitHub',
+    crashReloadBtn: 'Recargar Panel',
+    crashResetBtn: 'Limpiar Caché y Reiniciar',
+    crashTutorialTitle: 'Qué hacer ahora:',
+    crashStep1: '1. Haz clic arriba para copiar el informe de diagnóstico.',
+    crashStep2: '2. Abre una Issue en GitHub para que lo solucionemos.',
+    crashStep3: '3. Haz clic en "Recargar Panel" para volver a editar.'
   },
 
   zh: {
@@ -393,7 +432,20 @@ export const TRANSLATIONS: Record<Language, any> = {
     hoverScrubSub: '在视频卡片上滑动鼠标即可逐帧快进',
     hwAccelLabel: '硬件加速解码 (GPU)',
     hwAccelSub: '启用独立显卡硬解加速音视频即时回放',
-    replayTour: '重新播放欢迎导览 (Onboarding)'
+    replayTour: '重新播放欢迎导览 (Onboarding)',
+
+    // Crash Report & Error Boundary
+    crashTitle: '糟糕！出现意外错误',
+    crashSub: '面板遇到未预期的异常并已安全暂停，以保护您的 Premiere Pro 工程。',
+    crashCopyBtn: '复制诊断报告',
+    crashCopied: '报告已复制到剪贴板！✓',
+    crashGitHubBtn: '在 GitHub 提交 Issue',
+    crashReloadBtn: '重新加载面板',
+    crashResetBtn: '清除缓存并重启',
+    crashTutorialTitle: '接下来的步骤：',
+    crashStep1: '1. 点击上方按钮复制详细诊断日志。',
+    crashStep2: '2. 前往 GitHub 提交 Issue 以便我们快速修复。',
+    crashStep3: '3. 点击“重新加载面板”即可恢复正常剪辑。'
   },
 
   hi: {
@@ -488,7 +540,20 @@ export const TRANSLATIONS: Record<Language, any> = {
     hoverScrubSub: 'कार्ड पर माउस ले जाकर वीडियो फ्रेम्स तुरंत स्कैन करें',
     hwAccelLabel: 'हार्डवेयर डिकोडिंग (GPU)',
     hwAccelSub: 'डेडिकेटेड ग्राफिक्स कार्ड का उपयोग करके मीडिया तेज़ी से लोड करें',
-    replayTour: 'वेलकम टूर फिर से देखें (Onboarding)'
+    replayTour: 'वेलकम टूर फिर से देखें (Onboarding)',
+
+    // Crash Report & Error Boundary
+    crashTitle: 'उफ़! कुछ गलत हो गया',
+    crashSub: 'पैनल में एक अनपेक्षित समस्या आई और आपके प्रोजेक्ट की सुरक्षा के लिए इसे सुरक्षित रूप से रोक दिया गया।',
+    crashCopyBtn: 'डायग्नोस्टिक रिपोर्ट कॉपी करें',
+    crashCopied: 'रिपोर्ट क्लिपबोर्ड पर कॉपी हो गई! ✓',
+    crashGitHubBtn: 'GitHub पर Issue खोलें',
+    crashReloadBtn: 'पैनल पुनः लोड करें',
+    crashResetBtn: 'कैश साफ़ करें और रीस्टार्ट करें',
+    crashTutorialTitle: 'आगे क्या करें:',
+    crashStep1: '1. विस्तृत रिपोर्ट कॉपी करने के लिए ऊपर दिए गए बटन पर क्लिक करें।',
+    crashStep2: '2. समस्या को ठीक करने के लिए GitHub पर Issue दर्ज करें।',
+    crashStep3: '3. सामान्य रूप से संपादन जारी रखने के लिए "पैनल पुनः लोड करें" पर क्लिक करें।'
   }
 };
 
