@@ -53,6 +53,7 @@ export const FileCard: React.FC<FileCardProps> = memo(({
   const [scrubTimecode, setScrubTimecode] = useState<string | null>(null);
   const [thumbUrl, setThumbUrl] = useState<string | undefined>(item.thumbnailUrl);
   const [scrubFrameIndex, setScrubFrameIndex] = useState<number | null>(null);
+  const [scrubError, setScrubError] = useState<boolean>(false);
   const [fontFamilyName, setFontFamilyName] = useState('');
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -146,6 +147,7 @@ export const FileCard: React.FC<FileCardProps> = memo(({
 
   const handleMouseEnter = () => {
     setIsHovered(true);
+    setScrubError(false);
 
     if (item.mediaType === 'video') {
       hoverTimerRef.current = setTimeout(() => {
@@ -235,7 +237,7 @@ export const FileCard: React.FC<FileCardProps> = memo(({
     }
 
     if (item.mediaType === 'video') {
-      const displaySrc = isHovered && hoverScrubEnabled && scrubFrameIndex !== null && thumbUrl
+      const displaySrc = isHovered && hoverScrubEnabled && scrubFrameIndex !== null && !scrubError && thumbUrl
         ? getScrubFrameUrl(thumbUrl, scrubFrameIndex)
         : thumbUrl;
 
@@ -250,6 +252,11 @@ export const FileCard: React.FC<FileCardProps> = memo(({
             <img
               src={displaySrc}
               alt={item.name}
+              onError={() => {
+                if (scrubFrameIndex !== null) {
+                  setScrubError(true);
+                }
+              }}
               className="w-full h-full object-cover pointer-events-none"
               loading="lazy"
             />

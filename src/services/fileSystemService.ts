@@ -791,7 +791,7 @@ class FileSystemService {
           }
         }
 
-        if (nodeMods.fs.existsSync(outPath)) {
+        if (nodeMods.fs.existsSync(outPath) && nodeMods.fs.existsSync(firstFrame)) {
           const url = this.getFileUrl(outPath);
           this.thumbCache.set(videoPath, url);
           resolve(url);
