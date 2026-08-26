@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "deploy": "node scripts/deploy.cjs"
+    "deploy": "node scripts/deploy.cjs",
+    "package": "node scripts/package_release.cjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
