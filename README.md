@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Adobe_Premiere_Pro-2021--2026+-9999FF?style=for-the-badge&logo=adobe-premiere-pro&logoColor=white" />
   <img src="https://img.shields.io/badge/Platform-Windows_%7C_macOS-0078D6?style=for-the-badge&logo=apple&logoColor=white" />
-  <img src="https://img.shields.io/badge/UI-Apple_Liquid_Glass-111111?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/UI-Modern_Glassmorphism-111111?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Performance-60_FPS_Hardware_Accelerated-34D399?style=for-the-badge" />
   <img src="https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge" />
 </p>
