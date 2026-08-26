@@ -1,5 +1,5 @@
 # ==========================================================
-# Premiere File Browser — Windows 1-Click Automated Installer
+# Premiere File Browser — Windows 1-Click Local Installer
 # ==========================================================
 
 $ErrorActionPreference = "Stop"
@@ -30,6 +30,8 @@ New-Item -Path $targetDir -ItemType Directory -Force | Out-Null
 # 3. Copy Extension Files
 Write-Host "[3/4] Copying extension bundle..." -ForegroundColor Yellow
 $sourceDir = $PSScriptRoot
+if (-not $sourceDir) { $sourceDir = (Get-Location).Path }
+
 $itemsToCopy = @("CSXS", "jsx", "dist", "public", ".debug", "package.json")
 foreach ($item in $itemsToCopy) {
     $src = Join-Path $sourceDir $item
@@ -49,6 +51,7 @@ if (Test-Path $cachePath) {
 Write-Host ""
 Write-Host "====================================================" -ForegroundColor Green
 Write-Host "  ✓ Installation Complete!                           " -ForegroundColor Green
-Write-Host "  Open Premiere Pro -> Window -> Extensions          " -ForegroundColor White
-Write-Host "  -> 'Premiere File Browser'                         " -ForegroundColor Cyan
+Write-Host "  1. Restart Adobe Premiere Pro (if currently open)  " -ForegroundColor White
+Write-Host "  2. Go to: Window -> Extensions                     " -ForegroundColor White
+Write-Host "     -> 'Premiere File Browser'                      " -ForegroundColor Cyan
 Write-Host "====================================================" -ForegroundColor Green

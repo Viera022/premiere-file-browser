@@ -15,12 +15,12 @@
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
 - **🌊 Real-time Audio Waveforms**: Dynamic soundwave visualizer with instant hover previews and timeline insertion.
 - **🎬 60 FPS Hover Video Scrubbing**: Scrub video frames with millisecond precision directly on thumbnail cards with a floating timecode badge.
-- **🗂️ Universal Disk & Cloud Storage**:
-  - Automatically identifies local drives (`C:`, `D:`, `/Volumes/`) and cloud storage (**Google Drive**, **OneDrive**, **Dropbox**, **iCloud Drive**).
+- **🗂️ Universal Storage**:
+  - Automatically separates and organizes physical drives (`C:`, `D:`, `/Volumes/`) and cloud storage (**Google Drive**, **OneDrive**, **Dropbox**, **iCloud Drive**).
 - **🌍 5 Native Languages**: Full internationalization with pixel-perfect vector SVG flags:
   - 🇧🇷 Português (BR)
   - 🇺🇸 English
@@ -28,7 +28,7 @@
   - 🇨🇳 中文 (简体)
   - 🇮🇳 हिन्दी
 - **⚡ Turbo Keyboard Navigation**:
-  - `Space`: Instant macOS-style **QuickLook** preview.
+  - `Space`: Instant macOS-style **QuickLook** preview modal.
   - `Enter`: Insert selected media directly onto the timeline playhead.
   - `Alt + ←` / `Cmd + ↑`: Return to parent folder.
   - `Arrows`: Smooth grid and list navigation.
@@ -40,26 +40,36 @@
 
 ## 📦 Installation Guide
 
-### 🚀 Automated 1-Click Installation
+### ⚡ Method 1: Instant 1-Line Install (Recommended)
 
-#### 🪟 Windows:
-Open PowerShell as Administrator (or standard user) and run:
+No need to clone or install Node.js! Open your terminal and paste the command below:
+
+#### 🪟 Windows (PowerShell):
 ```powershell
-powershell -ExecutionPolicy Bypass -File install.ps1
+irm https://raw.githubusercontent.com/Viera022/premiere-file-browser/main/install-web.ps1 | iex
 ```
 
-#### 🍎 macOS (Apple Silicon M1-M4 & Intel):
-Open Terminal in the repository directory and run:
+#### 🍎 macOS (Terminal):
 ```bash
-chmod +x install.sh
-./install.sh
+curl -fsSL https://raw.githubusercontent.com/Viera022/premiere-file-browser/main/install-web.sh | bash
 ```
 
 ---
 
-### 🤖 Autonomous AI Agent Installation Command (One-Liner)
+### 📥 Method 2: Manual Download (From ZIP)
 
-If you are an AI coding assistant (Antigravity, Claude Code, Cursor, Copilot), run this command to build and deploy autonomously:
+1. Click the green **`Code`** button above -> **`Download ZIP`** (or download the latest Release).
+2. Extract the `.zip` archive to any folder.
+3. Run the installer:
+   - **Windows**: Right-click `install.ps1` and choose **Run with PowerShell** (or run `powershell -ExecutionPolicy Bypass -File install.ps1`).
+   - **macOS**: Open Terminal in the extracted folder and run `chmod +x install.sh && ./install.sh`.
+4. Open Premiere Pro -> Go to **Window > Extensions > Premiere File Browser** (in Portuguese: *Janela > Extensões > Premiere File Browser*).
+
+---
+
+### 🤖 Method 3: Autonomous AI Agent / Developer Install
+
+If you are an AI coding assistant (Antigravity, Claude Code, Cursor, Copilot) or a developer building from source:
 
 **Windows**:
 ```powershell
@@ -92,7 +102,7 @@ To enable high-speed background video thumbnail extraction:
 
 ## ⌨️ Keyboard Shortcuts Reference
 
-| Shortcut (Win) | Shortcut (Mac) | Action |
+| Shortcut (Windows) | Shortcut (macOS) | Action |
 |---|---|---|
 | `Space` | `Space` | QuickLook Instant Preview Modal |
 | `Enter` | `Return` | Insert Selected File to Timeline |
@@ -102,19 +112,11 @@ To enable high-speed background video thumbnail extraction:
 
 ---
 
-## 🛠️ Development & Building
+## 🛠️ How to Open in Adobe Premiere Pro
 
-```bash
-# 1. Install dependencies
-npm install
-
-# 2. Start local dev server (Hot reload)
-npm run dev
-
-# 3. Production Build & Deploy to CEP Extensions
-npm run build
-npm run deploy
-```
+1. Launch Adobe Premiere Pro.
+2. In the top menu bar, click on **Window** > **Extensions** > **Premiere File Browser** (in Portuguese: *Janela* > *Extensões* > *Premiere File Browser*).
+3. Dock the panel anywhere in your workspace (e.g., next to your Project Bin or Effect Controls).
 
 ---
 
