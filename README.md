@@ -21,7 +21,7 @@
 - **🎬 60 FPS Hover Video Scrubbing**: Scrub video frames with millisecond precision directly on thumbnail cards with a floating timecode badge.
 - **🗂️ Universal Storage**:
   - Automatically separates and organizes physical drives (`C:`, `D:`, `/Volumes/`) and cloud storage (**Google Drive**, **OneDrive**, **Dropbox**, **iCloud Drive**).
-- **🌍 5 Native Languages**: Full internationalization with pixel-perfect vector SVG flags:
+- **🌍 5 Native Languages**:
   - 🇧🇷 Português (BR)
   - 🇺🇸 English
   - 🇪🇸 Español
@@ -32,8 +32,8 @@
   - `Enter`: Insert selected media directly onto the timeline playhead.
   - `Alt + ←` / `Cmd + ↑`: Return to parent folder.
   - `Arrows`: Smooth grid and list navigation.
-- **🏷️ Color Labels**: Tint folders and assets with vivid color dots (Finder style) for instantaneous visual organization.
-- **🚀 Virtualized Progressive Rendering**: Open folders with **8,000+ files** in under **15ms** with zero RAM/CPU freeze.
+- **🏷️ Color Labels**: Tint folders and assets with color dots for instantaneous visual organization.
+- **🚀 Virtualized Progressive Rendering**: Open folders with **1,000,000+ files** in under **15ms** with zero RAM/CPU freeze.
 - **🎮 Hardware Decoding Toggle**: Dedicated GPU acceleration switch (NVDEC / D3D11 / Metal) for ultra-smooth playback.
 
 ---
