@@ -10,6 +10,7 @@ import { CustomLibrary } from '../types';
 import { Language, getTranslation } from '../i18n/translations';
 
 interface HomeScreenProps {
+  onTriggerNyan?: () => void;
   favoritesCount: number;
   customLibraries: CustomLibrary[];
   userName?: string;
@@ -22,6 +23,7 @@ interface HomeScreenProps {
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
+  onTriggerNyan,
   favoritesCount,
   customLibraries,
   userName = 'Viera',
@@ -33,8 +35,58 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onOpenPath
 }) => {
   const t = getTranslation(language);
+  const [logoClicks, setLogoClicks] = React.useState(0);
+  const clickTimeoutRef = React.useRef<any>(null);
+
+  // Roll the 8% probability horse easter egg once on component mount
+  const isHorseEgg = React.useMemo(() => {
+    return Math.random() < 0.08;
+  }, []);
+
+  const handleLogoClick = () => {
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+    }
+
+    const nextClicks = logoClicks + 1;
+    if (nextClicks >= 15) {
+      setLogoClicks(0);
+      if (onTriggerNyan) {
+        onTriggerNyan();
+      }
+    } else {
+      setLogoClicks(nextClicks);
+      
+      // Reset clicks if user stops clicking for 1 second
+      clickTimeoutRef.current = setTimeout(() => {
+        setLogoClicks(0);
+      }, 1000);
+    }
+  };
+
+  React.useEffect(() => {
+    return () => {
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    };
+  }, []);
 
   const getGreeting = () => {
+    if (isHorseEgg) {
+      switch (language) {
+        case 'pt':
+          return { greeting: 'Cavalo dado...', subtext: '...não se olha os dentes. 🐴' };
+        case 'es':
+          return { greeting: 'A caballo regalado...', subtext: '...no se le mira el diente. 🐴' };
+        case 'zh':
+          return { greeting: '赠送的马，', subtext: '……不看牙口。 🐴' };
+        case 'hi':
+          return { greeting: 'दान के घोड़े के...', subtext: '...दाँत नहीं देखे जाते। 🐴' };
+        case 'en':
+        default:
+          return { greeting: "Don't look a gift horse...", subtext: '...in the mouth. 🐴' };
+      }
+    }
+
     const hour = new Date().getHours();
     let greetingsList = t.morningGreetings;
     let sub = t.morningSub;
@@ -119,7 +171,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       <div className="flex-1 overflow-y-auto p-4 flex flex-col items-center justify-center custom-scrollbar">
         <div className="w-full max-w-lg flex flex-col items-center text-center my-auto py-2">
           {/* Premiere Pro Badge */}
-          <div className="relative mb-2 group">
+          <div className="relative mb-2 group cursor-pointer active:scale-95 transition-transform" onClick={handleLogoClick}>
             <div className="w-10 h-10 rounded-xl bg-[#00005b] border border-[#9999ff]/30 flex items-center justify-center shadow-lg transition-transform group-hover:scale-105">
               <span className="text-[#9999ff] font-black text-lg tracking-tighter">Pr</span>
             </div>

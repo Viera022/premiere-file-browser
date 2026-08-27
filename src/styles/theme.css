@@ -180,3 +180,82 @@ html, body, #root {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.4);
 }
+
+
+
+
+/* Nyan Cat Easter Egg Animations */
+@keyframes nyan-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animate-nyan-float {
+  animation: nyan-float 0.8s infinite ease-in-out;
+}
+
+@keyframes nyan-rainbow-even {
+  0%, 100% { transform: translateY(3px); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes nyan-rainbow-odd {
+  0%, 100% { transform: translateY(-3px); }
+  50% { transform: translateY(3px); }
+}
+.animate-rainbow-even {
+  animation: nyan-rainbow-even 0.35s infinite steps(2);
+}
+.animate-rainbow-odd {
+  animation: nyan-rainbow-odd 0.35s infinite steps(2);
+}
+
+
+/* Psychedelic Mode (Konami Code Easter Egg) */
+@keyframes psychedelic-glow {
+  0% { border-color: #ff0000; box-shadow: 0 0 8px rgba(255,0,0,0.5); }
+  17% { border-color: #ff9900; box-shadow: 0 0 8px rgba(255,153,0,0.5); }
+  33% { border-color: #ffff00; box-shadow: 0 0 8px rgba(255,255,0,0.5); }
+  50% { border-color: #33ff00; box-shadow: 0 0 8px rgba(51,255,0,0.5); }
+  67% { border-color: #0099ff; box-shadow: 0 0 8px rgba(0,153,255,0.5); }
+  83% { border-color: #6633ff; box-shadow: 0 0 8px rgba(102,51,255,0.5); }
+  100% { border-color: #ff0000; box-shadow: 0 0 8px rgba(255,0,0,0.5); }
+}
+
+@keyframes psychedelic-text {
+  0% { color: #ff0000; }
+  17% { color: #ff9900; }
+  33% { color: #ffff00; }
+  50% { color: #33ff00; }
+  67% { color: #0099ff; }
+  83% { color: #6633ff; }
+  100% { color: #ff0000; }
+}
+
+@keyframes psychedelic-bg {
+  0% { background-color: rgba(255,0,0,0.03); }
+  17% { background-color: rgba(255,153,0,0.03); }
+  33% { background-color: rgba(255,255,0,0.03); }
+  50% { background-color: rgba(51,255,0,0.03); }
+  67% { background-color: rgba(0,153,255,0.03); }
+  83% { background-color: rgba(102,51,255,0.03); }
+  100% { background-color: rgba(255,0,0,0.03); }
+}
+
+.psychedelic-mode .border-white\/10,
+.psychedelic-mode .border-zinc-800,
+.psychedelic-mode border,
+.psychedelic-mode [class*="border-"] {
+  animation: psychedelic-glow 4s infinite linear !important;
+}
+
+.psychedelic-mode .text-zinc-100,
+.psychedelic-mode .text-white,
+.psychedelic-mode .text-zinc-400,
+.psychedelic-mode h1,
+.psychedelic-mode h2,
+.psychedelic-mode h3 {
+  animation: psychedelic-text 4s infinite linear !important;
+}
+
+.psychedelic-mode {
+  animation: psychedelic-bg 6s infinite linear !important;
+}

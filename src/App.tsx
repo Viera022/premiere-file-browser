@@ -14,7 +14,10 @@ import { Language } from './i18n/translations';
 import { fileSystemService } from './services/fileSystemService';
 import { premiereService } from './services/premiereService';
 
+const KONAMI_KEYS = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'arrowright', 'arrowleft', 'arrowright', 'b', 'a'];
+
 export const App: React.FC = () => {
+  const konamiIndexRef = useRef(0);
   const [currentPath, setCurrentPath] = useState<string>(() => {
     const saved = localStorage.getItem('filebrowser_last_path');
     if (saved) return saved;
@@ -75,6 +78,10 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [timelineFeedback, setTimelineFeedback] = useState<string | null>(null);
+  const [isNyanActive, setIsNyanActive] = useState(false);
+  const [isPsychedelicMode, setIsPsychedelicMode] = useState(false);
+  const [lastKeys, setLastKeys] = useState<string[]>([]);
+  const [nyanSeconds, setNyanSeconds] = useState(0);
 
   // Request counter to cancel stale background loads
   const loadRequestIdRef = useRef(0);
@@ -368,9 +375,90 @@ export const App: React.FC = () => {
     setSearchQuery('');
   }, []);
 
+    useEffect(() => {
+    let interval: any;
+    if (isNyanActive) {
+      setNyanSeconds(0);
+      interval = setInterval(() => {
+        setNyanSeconds(s => s + 1);
+      }, 1000);
+    } else {
+      setNyanSeconds(0);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isNyanActive]);
+
+    // Register key events interest with Adobe CEP to intercept key presses (ESC, Space, etc.)
+  useEffect(() => {
+    if (typeof (window as any).CSInterface !== 'undefined') {
+      try {
+        const cs = new (window as any).CSInterface();
+        const interests = JSON.stringify([
+          { keyCode: 27 }, // Escape
+          { keyCode: 32 }, // Space
+          { keyCode: 37 }, // ArrowLeft
+          { keyCode: 38 }, // ArrowUp
+          { keyCode: 39 }, // ArrowRight
+          { keyCode: 40 }, // ArrowDown
+          { keyCode: 8 },  // Backspace
+          { keyCode: 13 }, // Enter
+          { keyCode: 66 }, // B
+          { keyCode: 65 }  // A
+        ]);
+        cs.registerKeyEventsInterest(interests);
+      } catch (e) {
+        console.warn('[App] Failed to register key events interest:', e);
+      }
+    }
+  }, []);
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = async (e: KeyboardEvent) => {
+      // Log keystroke for visual debugging
+      setLastKeys(prev => {
+        const keyDesc = `${e.key || 'Unknown'} (${e.keyCode || e.which || '?'})`;
+        return [...prev, keyDesc].slice(-5);
+      });
+
+      // Bulletproof Konami Code Tracker
+      const keyLower = e.key ? e.key.toLowerCase() : '';
+      const expectedKey = KONAMI_KEYS[konamiIndexRef.current];
+      
+      const isMatch = 
+        keyLower === expectedKey ||
+        (e.keyCode === 38 && expectedKey === 'arrowup') ||
+        (e.keyCode === 40 && expectedKey === 'arrowdown') ||
+        (e.keyCode === 37 && expectedKey === 'arrowleft') ||
+        (e.keyCode === 39 && expectedKey === 'arrowright') ||
+        (e.keyCode === 66 && expectedKey === 'b') ||
+        (e.keyCode === 65 && expectedKey === 'a');
+
+      if (isMatch) {
+        konamiIndexRef.current += 1;
+        if (konamiIndexRef.current === KONAMI_KEYS.length) {
+          konamiIndexRef.current = 0;
+          setIsPsychedelicMode(p => !p);
+        }
+      } else {
+        konamiIndexRef.current = 0;
+        // Check if start of sequence
+        const isFirstMatch = 
+          keyLower === KONAMI_KEYS[0] || 
+          (e.keyCode === 38 && KONAMI_KEYS[0] === 'arrowup');
+        if (isFirstMatch) {
+          konamiIndexRef.current = 1;
+        }
+      }
+
+      if (isNyanActive && (e.key === 'Escape' || e.code === 'Escape' || e.key === 'Esc')) {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsNyanActive(false);
+        return;
+      }
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
         return;
       }
@@ -431,9 +519,9 @@ export const App: React.FC = () => {
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedItem, filteredItems, handleNavigateUp]);
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
+  }, [selectedItem, filteredItems, handleNavigateUp, isNyanActive, isPsychedelicMode]);
 
   return (
     <div 
@@ -512,6 +600,7 @@ export const App: React.FC = () => {
 
         {isHomeView ? (
           <HomeScreen
+            onTriggerNyan={() => setIsNyanActive(true)}
             favoritesCount={favoritesCount}
             customLibraries={customLibraries}
             language={language}
@@ -599,6 +688,79 @@ export const App: React.FC = () => {
           onClose={() => setIsAddLibModalOpen(false)}
           onAddLibrary={handleAddLibrary}
         />
+      )}
+
+                        {isNyanActive && (
+        <div className="fixed inset-0 z-50 bg-[#003366] flex flex-col items-center justify-center select-none overflow-hidden font-mono text-white">
+          <audio src="./nyan.mp3" autoPlay loop />
+          
+          {/* Starry Background */}
+          <div className="absolute inset-0 pointer-events-none opacity-40">
+            <div className="absolute top-[10%] left-[20%] text-white text-xs animate-pulse">✦</div>
+            <div className="absolute top-[30%] left-[80%] text-white text-xs animate-pulse delay-100">✦</div>
+            <div className="absolute top-[70%] left-[15%] text-white text-xs animate-pulse delay-200">✦</div>
+            <div className="absolute top-[60%] left-[50%] text-white text-xs animate-pulse delay-300">✦</div>
+            <div className="absolute top-[80%] left-[85%] text-white text-xs animate-pulse delay-75">✦</div>
+            <div className="absolute top-[25%] left-[40%] text-white text-xs animate-pulse delay-150">✦</div>
+          </div>
+
+          <div className="text-center z-10 flex flex-col items-center gap-6 w-full max-w-2xl px-6">
+            <h1 className="text-yellow-300 font-black text-lg animate-pulse uppercase tracking-widest">
+              🌈 NYAN CAT MODE! 🌈
+            </h1>
+            
+            {/* Retro Game Scene Container */}
+            <div className="relative w-full h-64 bg-[#002244] border-4 border-black rounded-2xl overflow-hidden shadow-2xl">
+              {/* Starry background inside scene */}
+              <div className="absolute inset-0 pointer-events-none opacity-50">
+                <div className="absolute top-[15%] left-[10%] text-white text-[10px] animate-pulse">✦</div>
+                <div className="absolute top-[25%] left-[75%] text-white text-[10px] animate-pulse delay-75">✦</div>
+                <div className="absolute top-[75%] left-[25%] text-white text-[10px] animate-pulse delay-150">✦</div>
+                <div className="absolute top-[65%] left-[85%] text-white text-[10px] animate-pulse delay-100">✦</div>
+              </div>
+
+              {/* Oscillating Rainbow Trail (Perfect alignment, centered vertically) */}
+              <div className="absolute left-0 right-[50%] mr-[50px] top-1/2 -translate-y-1/2 h-24 flex overflow-hidden pointer-events-none select-none items-center justify-end">
+                {Array.from({ length: 48 }).map((_, i) => (
+                  <div 
+                    key={i} 
+                    className={`flex flex-col shrink-0 w-4 h-12 ${
+                      i % 2 === 0 ? 'animate-rainbow-even' : 'animate-rainbow-odd'
+                    }`}
+                  >
+                    <div className="w-full h-[8px] bg-[#ff0000]" />
+                    <div className="w-full h-[8px] bg-[#ff9900]" />
+                    <div className="w-full h-[8px] bg-[#ffff00]" />
+                    <div className="w-full h-[8px] bg-[#33ff00]" />
+                    <div className="w-full h-[8px] bg-[#0099ff]" />
+                    <div className="w-full h-[8px] bg-[#6633ff]" />
+                  </div>
+                ))}
+              </div>
+
+              {/* Centered Outer container for horizontal/vertical stability */}
+              <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 w-44 h-44 flex items-center justify-center z-10 pointer-events-none">
+                {/* Floating Inner container with keyframe translate */}
+                <div className="w-full h-full flex items-center justify-center animate-nyan-float">
+                  <img src="./nyan.gif" alt="Nyan Cat" className="w-full h-auto object-contain" />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-2 text-white text-xs text-center space-y-1 bg-black/30 p-3 rounded-xl border border-white/5 backdrop-blur-sm w-full max-w-sm">
+              <p className="font-bold text-xs text-zinc-100">
+                {language === 'pt' 
+                  ? `Você está nyanando por ${nyanSeconds} segundos!` 
+                  : `You have nyanned for ${nyanSeconds} seconds!`}
+              </p>
+              <p className="text-zinc-400 text-[9px] mt-1">
+                {language === 'pt' 
+                  ? 'Pressione ESC para fechar' 
+                  : 'Press ESC to exit'}
+              </p>
+            </div>
+          </div>
+        </div>
       )}
 
       {isSettingsModalOpen && (
